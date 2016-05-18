@@ -9,5 +9,5 @@ admin.autodiscover()
 urlpatterns = patterns('',
 
     url(r'^', include('rcApp.urls')),
-    url(r'^admin/', admin.site.urls),
+    url(r'^admin/', include(admin.site.urls)),
 )
