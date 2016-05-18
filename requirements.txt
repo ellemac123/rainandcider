@@ -1,2 +1,8 @@
 django_countries
 Django==1.8
+twython
+twython-django==1.5.2
+django-bootstrap3
+pytz
+us
+timezonefinder
