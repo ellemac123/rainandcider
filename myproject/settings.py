@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_countries',
+    'bootstrap3',
+    'twython_django_oauth',
     'rcApp',
 ]
 
