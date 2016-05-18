@@ -7,4 +7,5 @@ try:
 except IOError:
     pass
 
+
 from myproject.wsgi import application
