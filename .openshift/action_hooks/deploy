@@ -12,8 +12,8 @@ source $OPENSHIFT_HOMEDIR/python/virtenv/bin/activate
 
 
 
-#echo "Executing 'python $OPENSHIFT_REPO_DIR/myapp/manage.py syncdb --noinput'"
-#python "$OPENSHIFT_REPO_DIR"manage.py syncdb --noinput
+echo "Executing 'python $OPENSHIFT_REPO_DIR/myapp/manage.py syncdb --noinput'"
+python "$OPENSHIFT_REPO_DIR"manage.py syncdb --noinput
 
 
 echo "Executing 'python $OPENSHIFT_REPO_DIR/myapp/manage.py migrate'"
