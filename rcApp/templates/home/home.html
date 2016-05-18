@@ -1,0 +1,25 @@
+{% load staticfiles %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
+
+<li><a href="/country/"></a></li>
+<body>
+<div id="page-wrap">
+    <h1 class="banner" id="pageTitle">Rain & Cider</h1>
+    <h2 id="subHeader">Rain & Cider is a website designed to help you be in the location you desire. We provide the
+        local
+        time, weather, and twitter feeds of the country you select!</h2>
+
+    <div class="card" id = "indexCard">
+        <form action="" method="post">
+            {% csrf_token %}
+            <!--<h3 id="selectCountryText">Please select a country:</h3>-->
+            <!--{{form.as_p}}-->
+            <h3 id="selectCityText">Please select a city:</h3>
+            <!--{{cityform.as_p}}-->
+
+            <input type="submit" value="Submit"/>
+        </form>
+    </div>
+</div>
+</body>

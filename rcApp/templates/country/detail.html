@@ -1,0 +1,191 @@
+<!--Laura Macaluso-->
+{% load staticfiles %}
+{% load tz %}
+
+<li><a href="/country/detail.html"></a></li>
+
+
+<body>
+    <h1>Hello Detail</h1>
+
+</body>
+
+
+
+<!--<head>-->
+    <!--<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>-->
+    <!--<link href="{% static 'css/ticker-style.css' %}" rel="stylesheet" type="text/css"/>-->
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.0/jquery.min.js"></script>-->
+    <!--<script src="{% static 'js/jquery.ticker.js' %}" type="text/javascript"></script>-->
+    <!--<li><a href="/country/detail.html"></a></li>-->
+<!--</head>-->
+
+
+<!--<body>-->
+<!--<div id="sidebar">-->
+
+<!--</div>-->
+    <!--<div id="header_logo">-->
+        <!--<a id="logo" href="/">-->
+            <!--<img src="/static/images/home_icon.png" height="24" width="24" href="/">-->
+        <!--</a>-->
+    <!--</div>-->
+
+<!--<script>-->
+    <!--var sidebarHeight = $(window).innerHeight();-->
+    <!--$('#sidebar')​​​​​​​​​​​.css('height',sidebarHeight);​​​​​​​​​​​​​-->
+<!--</script>-->
+
+<!--<div id="page-wrap">-->
+    <!--<ul id="js-news" class="js-hidden">-->
+        <!--<li class="news-item"><a href="#">{{news.0}}</a></li>-->
+        <!--<li class="news-item"><a href="#">{{news.1}}</a></li>-->
+        <!--<li class="news-item"><a href="#">{{news.2}}</a></li>-->
+        <!--<li class="news-item"><a href="#">{{news.3}}</a></li>-->
+        <!--<li class="news-item"><a href="#">{{news.4}}</a></li>-->
+        <!--<li class="news-item"><a href="#">{{news.5}}</a></li>-->
+        <!--<li class="news-item"><a href="#">{{news.6}}</a></li>-->
+        <!--<li class="news-item"><a href="#">{{news.7}}</a></li>-->
+        <!--<li class="news-item"><a href="#">{{news.8}}</a></li>-->
+        <!--<li class="news-item"><a href="#">{{news.9}}</a></li>-->
+    <!--</ul>-->
+
+    <!--<script type="text/javascript">-->
+    <!--$(function () {-->
+        <!--$('#js-news').ticker();-->
+    <!--});-->
+    <!--</script>-->
+
+    <!--<h1 id="detailCountryName">Welcome to {{city}},{{state}}{{country.name}}</h1>-->
+    <!--<h2 id="timeHeader">{{current_time}}</h2>-->
+
+
+    <!--&lt;!&ndash;{{city.country}}&ndash;&gt;-->
+    <!--&lt;!&ndash;{{timezone}}&ndash;&gt;-->
+    <!--&lt;!&ndash;{{city.location_id}}&ndash;&gt;-->
+
+    <!--<div class="card-columns">-->
+        <!--<div id="weatherCard" class="card">-->
+            <!--<div class="card">-->
+                <!--<h2 id="weatherHeader">Current forecast:</h2>-->
+                <!--<h3 id="weatherDetail">{{current_conditions}} {{current_temperature}}°{{temperature_units}} in-->
+                    <!--{{city}}</h3>-->
+                <!--<img src="{{current_icon}}"/>-->
+
+                <!--<h3 id="feelsLike">Feels Like: {{feels_like}}°{{temperature_units}}</h3>-->
+            <!--</div>-->
+            <!--<div class="card">-->
+                <!--<h4 id="precipDetail">Chance of Precipetation: {{chance_precip}}%</h4>-->
+                <!--<h4 id="windDetail">Wind: {{wind_direction}} {{wind}} {{speed_units}}</h4>-->
+                <!--<h4 id="humidityDetail">Humidity: {{humidity}}%</h4>-->
+                <!--<h4 id="highDetail">High: {{day0_high}}°{{temperature_units}} </h4>-->
+                <!--<h4 id="lowDetail">Low: {{day0_low}}°{{temperature_units}}</h4>-->
+                <!--<h3 id="lastUpdated">Last Updated: {{last_update}} by weather.com</h3>-->
+                <!--<h3 id="timezone">{{timezone}} timezone</h3>-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+        <!--&lt;!&ndash;<div id="timeCard" class="card">&ndash;&gt;-->
+        <!--&lt;!&ndash;<h2 id="timeHeader">Current time in {{city}} : {{current_time}} </h2>&ndash;&gt;-->
+        <!--&lt;!&ndash;<h4 id="timeDetail">Timezone: {{timezone}}</h4>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+
+        <!--<div id="twitterCard" class="card">-->
+            <!--<h2 id="twitterHeader" variable={{twitterHandle}}>You are looking at local tweets in this area</h2>-->
+            <!--<script>-->
+                    <!--var header = document.getElementById('twitterHeader');-->
+                    <!--if(header.getAttribute('variable') == ""){-->
+                        <!--$('#twitterHeader').html('Currently, there are no local tweets to display');-->
+                    <!--}-->
+            <!--</script>-->
+
+            <!--<div class="card" id="feedcard" variable={{twitterHandle}}>-->
+                <!--<h4 id="twittFeed">@{{twitterHandle}} : {{twitterText}}</h4>-->
+                <!--<script>-->
+                    <!--var plant = document.getElementById('feedcard');-->
+                    <!--if(plant.getAttribute('variable') == ""){-->
+                         <!--$('#feedcard').css("display", "none");-->
+                    <!--}-->
+                <!--</script>-->
+            <!--</div>-->
+            <!--<div class="card" id="feedcard1" variable={{twitterHandle1}}>-->
+                <!--<h4 id="twittFeed1">@{{twitterHandle1}} : {{twitterText1}}</h4>-->
+                <!--<script>-->
+                    <!--var plant = document.getElementById('feedcard1');-->
+                    <!--if(plant.getAttribute('variable') == ""){-->
+                         <!--$('#feedcard1').css("display", "none");-->
+                    <!--}-->
+                <!--</script>-->
+            <!--</div>-->
+            <!--<div class="card" id="feedcard2" variable={{twitterHandle2}}>-->
+                <!--<h4 id="twittFeed2">@{{twitterHandle2}} : {{twitterText2}}</h4>-->
+                <!--<script>-->
+                    <!--var plant = document.getElementById('feedcard2');-->
+                    <!--if(plant.getAttribute('variable') == ""){-->
+                         <!--$('#feedcard2').css("display", "none");-->
+                    <!--}-->
+                <!--</script>-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+        <!--<div id="forecastCard" class="card">-->
+            <!--<div class="card">-->
+                <!--<table>-->
+                    <!--<h3 id="forecastHeader">Three-Day Forecast</h3>-->
+                    <!--<colgroup>-->
+                        <!--<col style="background-color:white">-->
+                        <!--<col style="background-color:beige">-->
+                        <!--<col style="background-color:white">-->
+                    <!--</colgroup>-->
+                    <!--<tr>-->
+                        <!--<th>{{tommDate}}</th>-->
+                        <!--<th>{{date2}}</th>-->
+                        <!--<th>{{date3}}</th>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td><img src="{{day1Icon}}"/></td>-->
+                        <!--<td><img src="{{day2Icon}}"/></td>-->
+                        <!--<td><img src="{{day3Icon}}"/></td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>{{day1forecast}}</td>-->
+                        <!--<td>{{day2forecast}}</td>-->
+                        <!--<td>{{day3forecast}}</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--&lt;!&ndash;chance precipitation&ndash;&gt;-->
+                        <!--<td>{{day1_precip}}% chance of precipitation</td>-->
+                        <!--<td>{{day2_precip}}% chance of precipitation</td>-->
+                        <!--<td>{{day3_precip}}% chance of precipitation</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--&lt;!&ndash;wind&ndash;&gt;-->
+                        <!--<td>Wind: {{wind1_direction}} {{wind1}} {{speed_units}}</td>-->
+                        <!--<td>Wind: {{wind2_direction}} {{wind2}} {{speed_units}}</td>-->
+                        <!--<td>Wind: {{wind3_direction}} {{wind3}} {{speed_units}}</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>High: {{day1_high}}°{{temperature_units}}</td>-->
+                        <!--<td>High: {{day2_high}}°{{temperature_units}}</td>-->
+                        <!--<td>High: {{day3_high}}°{{temperature_units}}</td>-->
+                    <!--</tr>-->
+                    <!--<tr>-->
+                        <!--<td>Low: {{day1_low}}°{{temperature_units}}</td>-->
+                        <!--<td>Low: {{day2_low}}°{{temperature_units}}</td>-->
+                        <!--<td>Low: {{day3_low}}°{{temperature_units}}</td>-->
+
+                    <!--</tr>-->
+                <!--</table>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+<!--</div>-->
+<!--</body>-->
+
+
+
