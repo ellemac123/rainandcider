@@ -7,8 +7,8 @@
 source $OPENSHIFT_HOMEDIR/python/virtenv/bin/activate
 
 
-echo "Executing 'python $OPENSHIFT_REPO_DIR/myapp/manage.py makemigrations'"
-python "$OPENSHIFT_REPO_DIR"manage.py makemigrations --noinput
+#echo "Executing 'python $OPENSHIFT_REPO_DIR/myapp/manage.py makemigrations'"
+#python "$OPENSHIFT_REPO_DIR"manage.py makemigrations --noinput
 
 
 
