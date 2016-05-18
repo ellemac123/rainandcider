@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render,
+from django.shortcuts import redirect, render
 from django.shortcuts import render_to_response
 
 from .forms import CityForm
