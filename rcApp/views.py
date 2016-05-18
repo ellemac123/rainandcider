@@ -18,7 +18,7 @@ def home(request):
             return redirect('country:detail', country_code=cityInfo.country, city_code=citydata['city'])
     else:
         cityform = CityForm()
-    return render(request, 'index.html', {'cityform': cityform})
+    return render(request, 'home/home.html', {'cityform': cityform})
 
 
 def detail(request, country_code, city_code):
