@@ -1,7 +1,7 @@
 #!/bin/bash
 #this one is the deploy hook .openshift/action_hooks/deploy
 
-
+source python2.7/bin/activate
 source $OPENSHIFT_HOMEDIR/python/virtenv/venv/bin/activate
 
 cd $OPENSHIFT_REPO_DIR
