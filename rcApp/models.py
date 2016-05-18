@@ -6,9 +6,7 @@ from django_countries.fields import CountryField
 def en_zed():
     return 'NZ'
 
-
 ''' changed country field from choices=list(countries) '''
-
 
 class City(models.Model):
     country = CountryField(choices=list(countries));  # hold the country co
