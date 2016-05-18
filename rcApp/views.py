@@ -4,7 +4,7 @@ from django.shortcuts import redirect, render
 
 def home(request):
      if request.method == 'POST':
-          return redirect('openshift:detail')
+          return redirect('country:detail')
 
      return render_to_response('home/home.html')
 
