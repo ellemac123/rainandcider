@@ -1,9 +1,0 @@
-
-source $OPENSHIFT_HOMEDIR/python/virtenv/bin/activate
-
-
-echo "Executing 'python $OPENSHIFT_REPO_DIR/vail/manage.py migrate'"
-python "$OPENSHIFT_REPO_DIR"manage.py migrate --noinput
-
-echo "Executing 'python $OPENSHIFT_REPO_DIR/wsgi/openshift/manage.py collectstatic --noinput'"
-python "$OPENSHIFT_REPO_DIR"/manage.py collectstatic --noinput
