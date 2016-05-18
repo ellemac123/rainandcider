@@ -7,11 +7,7 @@ from django.conf import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    url(r'^$', 'views.home', name='home'),
-    url(r'detail/$', 'views.detail' , name='detail'),
-    # url(r'^$', 'openshift.views.home', name='home'),
-    # url(r'^blog/', include('blog.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^', include('rcApp.urls')),
+    url(r'^admin/', admin.site.urls),
 )
