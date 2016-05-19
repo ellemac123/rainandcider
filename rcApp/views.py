@@ -1,8 +1,6 @@
 import json
 import urllib
-
-from urllib.request import urlopen
-
+import urllib2
 import pywapi
 import pytz
 import datetime
