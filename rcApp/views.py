@@ -35,6 +35,18 @@ def home(request):
         return render(request, 'home/home.html', {'cityform': cityform})
 
 
+def getState(countryName, cityState):
+    state = ' '
+    name = str(countryName)
+    if name == 'United States of America':
+        stateCode = cityState[-2:]
+        state = us.states.lookup(stateCode)
+        state = state.name
+    return state + ' '
+
+
+
+
 def getNews(cityState, countryName):
     name = str(countryName)
     if name == 'United States of America':
@@ -125,7 +137,11 @@ def detail(request, country_code, city_code):
         currentText = current_weather['current_conditions']['text'] + ' and'
 
     print("this is the current_weather: " + currentText)
+
+
+
     icon_num = current_weather['current_conditions']['icon']
+
     # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
     if icon_num == '':
         icon_num = current_weather['forecasts'][0]['day']['icon']
@@ -133,17 +149,19 @@ def detail(request, country_code, city_code):
     current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
 
     cityAndState = current_weather['location']['name']
+
+
     news = getNews(cityAndState, countryName=str(Country(country_code).name))
 
-
-    name = str(Country(country_code).name)
-    if name == 'United States of America':
-        stateCode = cityAndState[-2:]
-        state = us.states.lookup(stateCode)
-        state = ' ' + state.name + ', '
-
-    else:
-        state = ' '
+    state = getState(str(Country(country_code).name), cityAndState)
+    # name = str(Country(country_code).name)
+    # if name == 'United States of America':
+    #     stateCode = cityAndState[-2:]
+    #     state = us.states.lookup(stateCode)
+    #     state = ' ' + state.name + ', '
+    #
+    # else:
+    #     state = ' '
 
     icon1_num = current_weather['forecasts'][1]['day']['icon']
     day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon1_num)
