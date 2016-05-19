@@ -24,7 +24,7 @@ def home(request):
             cityInfo = City.objects.get(id=citydata['city'])
 
             messages.success(request, 'Successfully Changed')
-            return redirect('country:detail', country_code=cityInfo.country, city_code=citydata['city'])
+            return redirect('detail', country_code=cityInfo.country, city_code=citydata['city'])
     else:
         cityform = CityForm()
         return render(request, 'home/home.html', {'cityform': cityform})
