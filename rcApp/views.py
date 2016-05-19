@@ -1,21 +1,21 @@
-from django.shortcuts import redirect, render
-from django.contrib import messages
-from django.http import Http404
-from timezonefinder import TimezoneFinder
-from .forms import CityForm
-from .models import *
-from twython import Twython
-from django_countries import countries
-from django_countries.fields import Country
-import datetime
 import json
 import urllib
-import pytz
+
 import pywapi
 import us
+from django.contrib import messages
+from django.http import Http404
+from django.shortcuts import redirect, render
+from django_countries import countries
+from django_countries.fields import Country
+from timezonefinder import TimezoneFinder
+from twython import Twython
 
+from .forms import CityForm
+from .models import *
 
 twitterHandle = ''
+
 
 def home(request):
     cityform = CityForm()
@@ -38,9 +38,34 @@ def detail(request, country_code, city_code):
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
+    current_weather = pywapi.get_weather_from_weather_com(
+        cityData.location_id)  # this is to handle errors occuring from Queenstown - no current conditions so gets forecast for the day
+    if current_weather['current_conditions']['text'] == '':
+        currentText = current_weather['forecasts'][0]['day']['brief_text']
+        if currentText == '':
+            currentText = 'information is currently unavailable'
+    else:
+        currentText = current_weather['current_conditions']['text'] + ' and'
 
+    print("this is the current_weather: " + currentText)
+    icon_num = current_weather['current_conditions']['icon']
+    # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
+    if icon_num == '':
+        icon_num = current_weather['forecasts'][0]['day']['icon']
 
-    data = {'country': Country(country_code), 'city': cityData, }
+    current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
+
+    cityAndState = current_weather['location']['name']
+    name = str(Country(country_code).name)
+    if name == 'United States of America':
+        stateCode = cityAndState[-2:]
+        state = us.states.lookup(stateCode)
+        state = ' ' + state.name + ', '
+
+    else:
+        state = ' '
+
+    data = {'country': Country(country_code), 'city': cityData, 'state': state,}
     return render(request, 'country/detail.html', data)
 
 
@@ -77,14 +102,12 @@ def getNews(cityState, countryName):
         return list
 
 
-
 def findTimezone(lat, long):
     tf = TimezoneFinder()
     point = (float(long), float(lat))
     timezoneName = tf.timezone_at(*point)
 
     return timezoneName
-
 
 
 def tryTwitter(lat, long):
@@ -116,33 +139,13 @@ def tryTwitter(lat, long):
 
     return myList;
 
-
-
-
 # import urllib.request
 # def detail(request, country_code, city_code):
-#     if country_code not in countries:
-#         raise Http404("Invalid Country Code")
-#     cityData = City.objects.get(id=city_code)
 #
-#     current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
-#
-#     # this is to handle errors occuring from Queenstown - no current conditions so gets forecast for the day
-#     if current_weather['current_conditions']['text'] == '':
-#         currentText = current_weather['forecasts'][0]['day']['brief_text']
-#         if currentText == '':
-#             currentText = 'information is currently unavailable'
-#     else:
-#         currentText = current_weather['current_conditions']['text'] + ' and'
-#
-#     print("this is the current_weather: " + currentText)
-#     icon_num = current_weather['current_conditions']['icon']
-#     # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
-#     if icon_num == '':
-#         icon_num = current_weather['forecasts'][0]['day']['icon']
-#
-#     current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
-#
+
+
+
+
 #     icon1_num = current_weather['forecasts'][1]['day']['icon']
 #     day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon1_num)
 #     icon2_num = current_weather['forecasts'][2]['day']['icon']
@@ -151,17 +154,10 @@ def tryTwitter(lat, long):
 #     day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon3_num)
 #
 #
-#     cityAndState = current_weather['location']['name']
+#
 #     news = getNews(cityAndState, countryName=str(Country(country_code).name))
-#
-#     name = str(Country(country_code).name)
-#     if name == 'United States of America':
-#         stateCode = cityAndState[-2:]
-#         state = us.states.lookup(stateCode)
-#         state = ' ' + state.name + ', '
-#
-#     else:
-#         state = ' '
+
+
 #
 #     text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
 #
@@ -208,7 +204,3 @@ def tryTwitter(lat, long):
 #             }
 #     print(data)
 #     return render(request, 'country/detail.html', data)
-
-
-
-
