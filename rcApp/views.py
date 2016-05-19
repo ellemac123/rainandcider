@@ -1,9 +1,12 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
+from django.http import Http404
 from timezonefinder import TimezoneFinder
 from .forms import CityForm
 from .models import *
 from twython import Twython
+from django_countries import countries
+from django_countries.fields import Country
 import datetime
 import json
 import urllib
@@ -31,7 +34,13 @@ def home(request):
 
 
 def detail(request, country_code, city_code):
-    data = {'country': country_code, 'city': city_code, }
+    if country_code not in countries:
+        raise Http404("Invalid Country Code")
+    cityData = City.objects.get(id=city_code)
+
+
+
+    data = {'country': Country(country_code), 'city': cityData, }
     return render(request, 'country/detail.html', data)
 
 
@@ -111,27 +120,6 @@ def tryTwitter(lat, long):
 
 
 # import urllib.request
-# from django.http import Http404
-# from django_countries import countries
-# from django_countries.fields import Country
-#
-#
-# def home(request):
-#     cityform = CityForm()
-#
-#     if request.method == 'POST':
-#         cityform = CityForm(request.POST)
-#         if cityform.is_valid():
-#             citydata = cityform.cleaned_data
-#             cityInfo = City.objects.get(id=citydata['city'])
-#
-#             messages.success(request, 'Successfully Changed')
-#             return redirect('country:detail', country_code=cityInfo.country, city_code=citydata['city'])
-#     else:
-#         cityform = CityForm()
-#     return render(request, 'home/home.html', {'cityform': cityform})
-#
-#
 # def detail(request, country_code, city_code):
 #     if country_code not in countries:
 #         raise Http404("Invalid Country Code")
