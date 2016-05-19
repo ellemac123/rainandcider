@@ -43,12 +43,12 @@ def getNews(cityState, countryName):
         state = state.name
         name = state
     name = name.replace(' ', '%20')
-    url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/' + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
 
     try:
+        url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/' + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
         print(url)
         list = []
-        f = urllib.request.urlopen(url);
+        f = urllib.request.urlopen(url)
         content = f.read()
         decoded_response = content.decode('utf-8')
         jsonResponse = json.loads(decoded_response)
@@ -64,7 +64,7 @@ def getNews(cityState, countryName):
 
         return list
     except:
-        list = ['No News to Report', url]
+        list = ['No News to Report']
         return list
 
 
