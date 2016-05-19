@@ -35,7 +35,57 @@
             </div>
         </div>
 
+        <div id="forecastCard" class="card">
+            <div class="card">
+                <table>
+                    <h3 id="forecastHeader">Three-Day Forecast</h3>
+                    <colgroup>
+                        <col style="background-color:white">
+                        <col style="background-color:beige">
+                        <col style="background-color:white">
+                    </colgroup>
+                    <tr>
+                        <th>{{tommDate}}</th>
+                        <th>{{date2}}</th>
+                        <th>{{date3}}</th>
+                    </tr>
+                    <tr>
+                        <td><img src="{{day1Icon}}"/></td>
+                        <td><img src="{{day2Icon}}"/></td>
+                        <td><img src="{{day3Icon}}"/></td>
+                    </tr>
+                    <tr>
+                        <td>{{day1forecast}}</td>
+                        <td>{{day2forecast}}</td>
+                        <td>{{day3forecast}}</td>
+                    </tr>
+                    <tr>
+                        <!--chance precipitation-->
+                        <td>{{day1_precip}}% chance of precipitation</td>
+                        <td>{{day2_precip}}% chance of precipitation</td>
+                        <td>{{day3_precip}}% chance of precipitation</td>
+                    </tr>
+                    <tr>
+                        <!--wind-->
+                        <td>Wind: {{wind1_direction}} {{wind1}} {{speed_units}}</td>
+                        <td>Wind: {{wind2_direction}} {{wind2}} {{speed_units}}</td>
+                        <td>Wind: {{wind3_direction}} {{wind3}} {{speed_units}}</td>
+                    </tr>
+                    <tr>
+                        <td>High: {{day1_high}}°{{temperature_units}}</td>
+                        <td>High: {{day2_high}}°{{temperature_units}}</td>
+                        <td>High: {{day3_high}}°{{temperature_units}}</td>
+                    </tr>
+                    <tr>
+                        <td>Low: {{day1_low}}°{{temperature_units}}</td>
+                        <td>Low: {{day2_low}}°{{temperature_units}}</td>
+                        <td>Low: {{day3_low}}°{{temperature_units}}</td>
 
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
 
 
 
