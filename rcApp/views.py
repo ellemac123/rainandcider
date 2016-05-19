@@ -1,8 +1,14 @@
 from django.shortcuts import redirect, render
 from django.shortcuts import render_to_response
-
+from timezonefinder import TimezoneFinder
 from .forms import CityForm
 from .models import *
+
+import json
+import urllib
+import pytz
+import pywapi
+import us
 
 
 def home(request):
@@ -26,23 +32,63 @@ def detail(request, country_code, city_code):
     return render(request, 'country/detail.html', data)
 
 
+
+
+
+def getNews(cityState, countryName):
+    name = str(countryName)
+    if name == 'United States of America':
+        stateCode = cityState[-2:]
+        state = us.states.lookup(stateCode)
+        state = state.name
+        name = state
+    name = name.replace(' ', '%20')
+
+    try:
+        url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/' + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
+        print(url)
+        list = []
+        f = urllib.request.urlopen(url);
+        content = f.read()
+        decoded_response = content.decode('utf-8')
+        jsonResponse = json.loads(decoded_response)
+
+        length = len(jsonResponse["results"][0]["article_list"]["results"])
+        print("\n\n\nTHIS IS THE LENGTH : " + str(length))
+
+        if length > 0:
+            for x in range(length):
+                list.append(jsonResponse["results"][0]["article_list"]["results"][x]["title"])
+        else:
+            list = ['No Current News to Report']
+
+        return list
+    except:
+        list = ['No Current News to Report']
+        return list
+
+
+
+def findTimezone(lat, long):
+    tf = TimezoneFinder()
+    point = (float(long), float(lat))
+    timezoneName = tf.timezone_at(*point)
+
+    return timezoneName
+
+
+
 #
 #
 # import datetime
-# import json
-# import urllib
-# import urllib.request
 #
-# import pytz
-# import pywapi
-# import us
+# import urllib.request
 # from django.contrib import messages
 # from django.http import Http404
 # from django.shortcuts import redirect
 # from django.shortcuts import render
 # from django_countries import countries
 # from django_countries.fields import Country
-# from timezonefinder import TimezoneFinder
 # from twython import Twython
 #
 # from .forms import CityForm
@@ -185,46 +231,6 @@ def detail(request, country_code, city_code):
 #         myList = [text, twitterHandle, text, twitterHandle, text, twitterHandle, ]  # , text1, twitterHandle1]
 #
 #     return myList;
-#
-#
-# def findTimezone(lat, long):
-#     tf = TimezoneFinder()
-#     point = (float(long), float(lat))
-#     timezoneName = tf.timezone_at(*point)
-#
-#     return timezoneName
-#
-#
-# def getNews(cityState, countryName):
-#     name = str(countryName)
-#     if name == 'United States of America':
-#         stateCode = cityState[-2:]
-#         state = us.states.lookup(stateCode)
-#         state = state.name
-#         name = state
-#     name = name.replace(' ', '%20')
-#
-#     try:
-#         url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/' + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
-#         print(url)
-#         list = []
-#         f = urllib.request.urlopen(url);
-#         content = f.read()
-#         decoded_response = content.decode('utf-8')
-#         jsonResponse = json.loads(decoded_response)
-#
-#         length = len(jsonResponse["results"][0]["article_list"]["results"])
-#         print("\n\n\nTHIS IS THE LENGTH : " + str(length))
-#
-#         if length > 0:
-#             for x in range(length):
-#                 list.append(jsonResponse["results"][0]["article_list"]["results"][x]["title"])
-#         else:
-#             list = ['No Current News to Report']
-#
-#         return list
-#     except:
-#         list = ['No Current News to Report']
-#         return list
-#
+
+
 
