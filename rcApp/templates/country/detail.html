@@ -35,6 +35,50 @@
             </div>
         </div>
 
+
+
+
+        <div id="twitterCard" class="card">
+            <h2 id="twitterHeader" variable={{twitterHandle}}>You are looking at local tweets in this area</h2>
+            <script>
+                    var header = document.getElementById('twitterHeader');
+                    if(header.getAttribute('variable') == ""){
+                        $('#twitterHeader').html('Currently, there are no local tweets to display');
+                    }
+            </script>
+
+            <div class="card" id="feedcard" variable={{twitterHandle}}>
+                <h4 id="twittFeed">@{{twitterHandle}} : {{twitterText}}</h4>
+                <script>
+                    var plant = document.getElementById('feedcard');
+                    if(plant.getAttribute('variable') == ""){
+                         $('#feedcard').css("display", "none");
+                    }
+                </script>
+            </div>
+            <div class="card" id="feedcard1" variable={{twitterHandle1}}>
+                <h4 id="twittFeed1">@{{twitterHandle1}} : {{twitterText1}}</h4>
+                <script>
+                    var plant = document.getElementById('feedcard1');
+                    if(plant.getAttribute('variable') == ""){
+                         $('#feedcard1').css("display", "none");
+                    }
+                </script>
+            </div>
+            <div class="card" id="feedcard2" variable={{twitterHandle2}}>
+                <h4 id="twittFeed2">@{{twitterHandle2}} : {{twitterText2}}</h4>
+                <script>
+                    var plant = document.getElementById('feedcard2');
+                    if(plant.getAttribute('variable') == ""){
+                         $('#feedcard2').css("display", "none");
+                    }
+                </script>
+            </div>
+        </div>
+
+
+
+
         <div id="forecastCard" class="card">
             <div class="card">
                 <table>
@@ -152,44 +196,7 @@
         <!--&lt;!&ndash;<h4 id="timeDetail">Timezone: {{timezone}}</h4>&ndash;&gt;-->
         <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-
-        <!--<div id="twitterCard" class="card">-->
-            <!--<h2 id="twitterHeader" variable={{twitterHandle}}>You are looking at local tweets in this area</h2>-->
-            <!--<script>-->
-                    <!--var header = document.getElementById('twitterHeader');-->
-                    <!--if(header.getAttribute('variable') == ""){-->
-                        <!--$('#twitterHeader').html('Currently, there are no local tweets to display');-->
-                    <!--}-->
-            <!--</script>-->
-
-            <!--<div class="card" id="feedcard" variable={{twitterHandle}}>-->
-                <!--<h4 id="twittFeed">@{{twitterHandle}} : {{twitterText}}</h4>-->
-                <!--<script>-->
-                    <!--var plant = document.getElementById('feedcard');-->
-                    <!--if(plant.getAttribute('variable') == ""){-->
-                         <!--$('#feedcard').css("display", "none");-->
-                    <!--}-->
-                <!--</script>-->
-            <!--</div>-->
-            <!--<div class="card" id="feedcard1" variable={{twitterHandle1}}>-->
-                <!--<h4 id="twittFeed1">@{{twitterHandle1}} : {{twitterText1}}</h4>-->
-                <!--<script>-->
-                    <!--var plant = document.getElementById('feedcard1');-->
-                    <!--if(plant.getAttribute('variable') == ""){-->
-                         <!--$('#feedcard1').css("display", "none");-->
-                    <!--}-->
-                <!--</script>-->
-            <!--</div>-->
-            <!--<div class="card" id="feedcard2" variable={{twitterHandle2}}>-->
-                <!--<h4 id="twittFeed2">@{{twitterHandle2}} : {{twitterText2}}</h4>-->
-                <!--<script>-->
-                    <!--var plant = document.getElementById('feedcard2');-->
-                    <!--if(plant.getAttribute('variable') == ""){-->
-                         <!--$('#feedcard2').css("display", "none");-->
-                    <!--}-->
-                <!--</script>-->
-            <!--</div>-->
-        <!--</div>-->
+<!-- took twitter card - please work -->
 
 
 <!-- took forecasting card yolo -->

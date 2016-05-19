@@ -112,9 +112,6 @@ def tryTwitter(lat, long):
 
 
 
-
-
-
 def detail(request, country_code, city_code):
     if country_code not in countries:
         raise Http404("Invalid Country Code")
@@ -161,6 +158,9 @@ def detail(request, country_code, city_code):
     text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
     local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
     tz = pytz.timezone(local_timezone)
+
+    print("TIMEZONE IS : " + tz)
+
     current_time = datetime.datetime.now(tz)
 
 
