@@ -1,6 +1,7 @@
 <!--Laura Macaluso-->
 {% load staticfiles %}
 {% load tz %}
+
 <head>
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}"/>
     <link href="{% static 'css/ticker-style.css' %}" rel="stylesheet" type="text/css"/>
@@ -12,7 +13,10 @@
 
 <body>
     <h1 id="detailCountryName">Welcome to {{city}},{{state}}{{country.name}}</h1>
+    {% localtime off %}
     <h2 id="timeHeader">{{current_time}}</h2>
+    {% endlocaltime %}
+
 
     <div class="card-columns">
         <div id="weatherCard" class="card">

@@ -35,10 +35,6 @@ def home(request):
         return render(request, 'home/home.html', {'cityform': cityform})
 
 
-
-
-
-
 def getNews(cityState, countryName):
     name = str(countryName)
     if name == 'United States of America':
