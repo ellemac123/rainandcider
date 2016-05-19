@@ -17,7 +17,8 @@ from .forms import CityForm
 from .models import *
 
 twitterHandle = ''
-
+TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
+TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 
 def home(request):
     cityform = CityForm()
@@ -41,8 +42,8 @@ def getState(countryName, cityState):
     if name == 'United States of America':
         stateCode = cityState[-2:]
         state = us.states.lookup(stateCode)
-        state = state.name
-    return ' ' + state + ', '
+        state = state.name + ', '
+    return ' ' + state
 
 
 
@@ -90,8 +91,6 @@ def findTimezone(lat, long):
 
 
 def tryTwitter(lat, long):
-    TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
-    TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
     twitter = Twython(TWITTER_KEY, TWITTER_SECRET, oauth_version=2)
     ACCESS_TOKEN = twitter.obtain_access_token()
     twitter = Twython(TWITTER_KEY, access_token=ACCESS_TOKEN)
@@ -145,7 +144,6 @@ def detail(request, country_code, city_code):
     current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
     cityAndState = current_weather['location']['name']
 
-
     news = getNews(cityAndState, countryName=str(Country(country_code).name))
 
     state = getState(str(Country(country_code).name), cityAndState)
@@ -159,7 +157,6 @@ def detail(request, country_code, city_code):
 
     text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
     local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
-    #tz = pytz.timezone(local_timezone)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
 
