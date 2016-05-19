@@ -159,8 +159,8 @@ def detail(request, country_code, city_code):
 
     text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
     local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
-    tz = pytz.timezone(local_timezone)
-    current_time = datetime.datetime.now(tz)
+    #tz = pytz.timezone(local_timezone)
+    current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
 
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
