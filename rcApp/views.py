@@ -159,8 +159,7 @@ def detail(request, country_code, city_code):
     local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
     tz = pytz.timezone(local_timezone)
     current_time = datetime.datetime.now(tz)
-    
-    print("Current time : " + current_time)
+
 
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
             'current_conditions': currentText,
