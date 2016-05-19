@@ -1,6 +1,5 @@
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from django.shortcuts import render_to_response
 from timezonefinder import TimezoneFinder
 from .forms import CityForm
 from .models import *
@@ -28,7 +27,7 @@ def home(request):
             return redirect('country:detail', country_code=cityInfo.country, city_code=citydata['city'])
     else:
         cityform = CityForm()
-    return render_to_response('home/home.html')
+        return render(request, 'home/home.html', {'cityform': cityform})
 
 
 def detail(request, country_code, city_code):
