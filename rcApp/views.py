@@ -1,8 +1,10 @@
 from django.shortcuts import redirect, render
+from django.contrib import messages
 from django.shortcuts import render_to_response
 from timezonefinder import TimezoneFinder
 from .forms import CityForm
 from .models import *
+from twython import Twython
 
 import json
 import urllib
@@ -10,6 +12,8 @@ import pytz
 import pywapi
 import us
 
+
+twitterHandle = ''
 
 def home(request):
     cityform = CityForm()
@@ -20,7 +24,7 @@ def home(request):
             citydata = cityform.cleaned_data
             cityInfo = City.objects.get(id=citydata['city'])
 
-            #   messages.success(request, 'Successfully Changed')
+            messages.success(request, 'Successfully Changed')
             return redirect('country:detail', country_code=cityInfo.country, city_code=citydata['city'])
     else:
         cityform = CityForm()
@@ -30,9 +34,6 @@ def home(request):
 def detail(request, country_code, city_code):
     data = {'country': country_code, 'city': city_code, }
     return render(request, 'country/detail.html', data)
-
-
-
 
 
 def getNews(cityState, countryName):
@@ -78,23 +79,42 @@ def findTimezone(lat, long):
 
 
 
-#
-#
+def tryTwitter(lat, long):
+    TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
+    TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
+    twitter = Twython(TWITTER_KEY, TWITTER_SECRET, oauth_version=2)
+    ACCESS_TOKEN = twitter.obtain_access_token()
+    twitter = Twython(TWITTER_KEY, access_token=ACCESS_TOKEN)
+    geoString = lat + ',' + long + ',150mi'
+    a = twitter.search(q='#news', geocode=geoString, count=10)
+    list_length = len(a['statuses'])
+    print("HERE IS LIST LENGTH OF TWITTERRRR:" + str(list_length))
+
+    try:
+        if list_length > 2:
+            text = a['statuses'][0]['text']
+            twitterHandle = a['statuses'][0]['user']['screen_name']
+            text1 = a['statuses'][1]['text']
+            twitterHandle1 = a['statuses'][1]['user']['screen_name']
+            text2 = a['statuses'][2]['text']
+            twitterHandle2 = a['statuses'][2]['user']['screen_name']
+            myList = [text, twitterHandle, text1, twitterHandle1, text2, twitterHandle2]
+        else:
+            raise Exception
+    except:
+        text = 'no news to report'
+        twitterHandle = ''
+        myList = [text, twitterHandle, text, twitterHandle, text, twitterHandle, ]  # , text1, twitterHandle1]
+
+    return myList;
+
+
+
 # import datetime
-#
 # import urllib.request
-# from django.contrib import messages
 # from django.http import Http404
-# from django.shortcuts import redirect
-# from django.shortcuts import render
 # from django_countries import countries
 # from django_countries.fields import Country
-# from twython import Twython
-#
-# from .forms import CityForm
-# from .models import City
-#
-# twitterHandle = ''
 #
 #
 # def home(request):
@@ -201,36 +221,7 @@ def findTimezone(lat, long):
 #             }
 #     print(data)
 #     return render(request, 'country/detail.html', data)
-#
-#
-# def tryTwitter(lat, long):
-#     TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
-#     TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
-#     twitter = Twython(TWITTER_KEY, TWITTER_SECRET, oauth_version=2)
-#     ACCESS_TOKEN = twitter.obtain_access_token()
-#     twitter = Twython(TWITTER_KEY, access_token=ACCESS_TOKEN)
-#     geoString = lat + ',' + long + ',150mi'
-#     a = twitter.search(q='#news', geocode=geoString, count=10)
-#     list_length = len(a['statuses'])
-#     print("HERE IS LIST LENGTH OF TWITTERRRR:" + str(list_length))
-#
-#     try:
-#         if list_length > 2:
-#             text = a['statuses'][0]['text']
-#             twitterHandle = a['statuses'][0]['user']['screen_name']
-#             text1 = a['statuses'][1]['text']
-#             twitterHandle1 = a['statuses'][1]['user']['screen_name']
-#             text2 = a['statuses'][2]['text']
-#             twitterHandle2 = a['statuses'][2]['user']['screen_name']
-#             myList = [text, twitterHandle, text1, twitterHandle1, text2, twitterHandle2]
-#         else:
-#             raise Exception
-#     except:
-#         text = 'no news to report'
-#         twitterHandle = ''
-#         myList = [text, twitterHandle, text, twitterHandle, text, twitterHandle, ]  # , text1, twitterHandle1]
-#
-#     return myList;
+
 
 
 
