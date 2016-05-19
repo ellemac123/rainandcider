@@ -5,7 +5,7 @@ from timezonefinder import TimezoneFinder
 from .forms import CityForm
 from .models import *
 from twython import Twython
-
+import datetime
 import json
 import urllib
 import pytz
@@ -110,7 +110,7 @@ def tryTwitter(lat, long):
 
 
 
-# import datetime
+
 # import urllib.request
 # from django.http import Http404
 # from django_countries import countries
