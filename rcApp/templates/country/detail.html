@@ -19,6 +19,27 @@
     </div>
 
 
+    <div id="page-wrap">
+    <ul id="js-news" class="js-hidden">
+        <li class="news-item"><a href="#">{{news.0}}</a></li>
+        <li class="news-item"><a href="#">{{news.1}}</a></li>
+        <li class="news-item"><a href="#">{{news.2}}</a></li>
+        <li class="news-item"><a href="#">{{news.3}}</a></li>
+        <li class="news-item"><a href="#">{{news.4}}</a></li>
+        <li class="news-item"><a href="#">{{news.5}}</a></li>
+        <li class="news-item"><a href="#">{{news.6}}</a></li>
+        <li class="news-item"><a href="#">{{news.7}}</a></li>
+        <li class="news-item"><a href="#">{{news.8}}</a></li>
+        <li class="news-item"><a href="#">{{news.9}}</a></li>
+    </ul>
+
+    <script type="text/javascript">
+    $(function () {
+        $('#js-news').ticker();
+    });
+    </script>
+
+
     <h1 id="detailCountryName">Welcome to {{city}},{{state}}{{country.name}}</h1>
     {% localtime off %}
     <h2 id="timeHeader">{{current_time}}</h2>
@@ -161,51 +182,11 @@
     <!--$('#sidebar')​​​​​​​​​​​.css('height',sidebarHeight);​​​​​​​​​​​​​-->
 <!--</script>-->
 
-<!--<div id="page-wrap">-->
-    <!--<ul id="js-news" class="js-hidden">-->
-        <!--<li class="news-item"><a href="#">{{news.0}}</a></li>-->
-        <!--<li class="news-item"><a href="#">{{news.1}}</a></li>-->
-        <!--<li class="news-item"><a href="#">{{news.2}}</a></li>-->
-        <!--<li class="news-item"><a href="#">{{news.3}}</a></li>-->
-        <!--<li class="news-item"><a href="#">{{news.4}}</a></li>-->
-        <!--<li class="news-item"><a href="#">{{news.5}}</a></li>-->
-        <!--<li class="news-item"><a href="#">{{news.6}}</a></li>-->
-        <!--<li class="news-item"><a href="#">{{news.7}}</a></li>-->
-        <!--<li class="news-item"><a href="#">{{news.8}}</a></li>-->
-        <!--<li class="news-item"><a href="#">{{news.9}}</a></li>-->
-    <!--</ul>-->
-
-    <!--<script type="text/javascript">-->
-    <!--$(function () {-->
-        <!--$('#js-news').ticker();-->
-    <!--});-->
-    <!--</script>-->
-
-    <!--<h1 id="detailCountryName">Welcome to {{city}},{{state}}{{country.name}}</h1>-->
-
-
-
-    <!--&lt;!&ndash;{{city.country}}&ndash;&gt;-->
-    <!--&lt;!&ndash;{{timezone}}&ndash;&gt;-->
-    <!--&lt;!&ndash;{{city.location_id}}&ndash;&gt;-->
-
-
 
 
 <!-- Division for card columns --->
 <!-- Took the weather card as well -->
-
-
-
-
-        <!--&lt;!&ndash;<div id="timeCard" class="card">&ndash;&gt;-->
-        <!--&lt;!&ndash;<h2 id="timeHeader">Current time in {{city}} : {{current_time}} </h2>&ndash;&gt;-->
-        <!--&lt;!&ndash;<h4 id="timeDetail">Timezone: {{timezone}}</h4>&ndash;&gt;-->
-        <!--&lt;!&ndash;</div>&ndash;&gt;-->
-
 <!-- took twitter card - please work -->
-
-
 <!-- took forecasting card yolo -->
 
 
