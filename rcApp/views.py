@@ -64,7 +64,7 @@ def getNews(cityState, countryName):
 
         return list
     except:
-        list = ['No Current News to Report']
+        list = ['No News to Report']
         return list
 
 
