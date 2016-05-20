@@ -10,6 +10,7 @@
         local
         time, weather, and twitter feeds of the country you select!</h2>
 
+    {% cache 500 card %}
     <div class="card" id = "indexCard">
         <form action="" method="post">
             {% csrf_token %}
@@ -21,5 +22,7 @@
             <input type="submit" value="Submit"/>
         </form>
     </div>
+    {% endcache %}
+
 </div>
 </body>
