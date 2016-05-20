@@ -101,7 +101,7 @@ if ON_OPENSHIFT:
     CACHES = {
         'default': {
             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': '%s:%s' % (os.environ['OPENSHIFT_INTERNAL_IP'], CACHE_PORT),
+            'LOCATION': '%s:%s' % (os.environ['OPENSHIFT_PYTHON_IP'], CACHE_PORT),
         }
     }
 
