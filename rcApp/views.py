@@ -1,5 +1,4 @@
 import json
-import urllib
 import urllib2
 import pywapi
 import pytz
@@ -12,7 +11,7 @@ from django_countries import countries
 from django_countries.fields import Country
 from timezonefinder import TimezoneFinder
 from twython import Twython
-
+from django.views.decorators.cache import cache_page
 from .forms import CityForm
 from .models import *
 
@@ -20,6 +19,7 @@ twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 
+@cache_page(60 * 5)
 def home(request):
     cityform = CityForm()
 
