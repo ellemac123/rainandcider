@@ -8,3 +8,4 @@ pytz
 us
 timezonefinder
 pywapi
+python-memcached
