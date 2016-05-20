@@ -15,8 +15,11 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 if 'OPENSHIFT_REPO_DIR' in os.environ:
     ON_OPENSHIFT = True
+else:
+    ON_OPENSHIFT = False
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
@@ -87,16 +90,10 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 if ON_OPENSHIFT:
 
     LOG_DIR = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''))
-    REDIS_URL = "redis://:{}@{}:{}/1".format(os.environ.get('OPENSHIFT_REDIS_DB_PASSWORD', ''),
-                                             os.environ.get('OPENSHIFT_REDIS_DB_HOST', ''),
-                                             os.environ.get('OPENSHIFT_REDIS_DB_PORT', ''))
+
 else:
     LOG_DIR = '.'
-    REDIS_URL = "redis://:{}@{}:{}/1".format(os.environ.get('OPENSHIFT_REDIS_DB_PASSWORD', ''),
-                                             os.environ.get('OPENSHIFT_REDIS_DB_HOST', ''),
-                                             os.environ.get('OPENSHIFT_REDIS_DB_PORT', ''))
 
-BROKER_URL = REDIS_URL
 
 if 'OPENSHIFT_REPO_DIR' in os.environ:
     DATABASES = {
@@ -114,22 +111,6 @@ else:
     }
 
 
-
-#For caching data - using redis
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": REDIS_URL,
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
-
-
-# Causes django to use Redis for session information
-SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
-SESSION_CACHE_ALIAS = "default"
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
