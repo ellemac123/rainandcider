@@ -19,7 +19,7 @@ twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 
-@cache_page(60 * 5)
+# @cache_page(60 * 5)
 def home(request):
     cityform = CityForm()
 
