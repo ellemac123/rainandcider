@@ -3,6 +3,7 @@ Django==1.8
 twython
 twython-django==1.5.2
 django-bootstrap3
+django-redis
 pytz
 us
 timezonefinder
