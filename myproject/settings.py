@@ -114,12 +114,6 @@ CACHE_PORT = '11211'
 #         }
 #     }
 
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': '%s:%s' % (os.environ['OPENSHIFT_PYTHON_IP'], CACHE_PORT),}
-}
-
 
 
 if 'OPENSHIFT_REPO_DIR' in os.environ:

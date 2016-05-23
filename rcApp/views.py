@@ -20,7 +20,7 @@ from .models import *
 twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
-
+c
 @cache_page(60 * 5)
 def home(request):
     cityform = CityForm()
@@ -153,7 +153,7 @@ def detail(request, country_code, city_code):
     print(" ")
     print("this is what cache value is :    " + str(cache.get('news')))
     news = cache.get('news')
-    if cache.get('news') == None:
+    if cache.get('news') is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
         cache.set('news', 'hello', 280000) #timeout is a :day - then the news will refresh
         print("This is the cache value AFTER 'caching' : " + str(cache.get('news')))
