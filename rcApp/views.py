@@ -143,12 +143,9 @@ def detail(request, country_code, city_code):
         cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)
 
 
-    icon1_num = current_weather['forecasts'][1]['day']['icon']
-    day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon1_num)
-    icon2_num = current_weather['forecasts'][2]['day']['icon']
-    day2_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon2_num)
-    icon3_num = current_weather['forecasts'][3]['day']['icon']
-    day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon3_num)
+    day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
+    day2_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][2]['day']['icon'])
+    day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][3]['day']['icon'])
 
 
     #cache timezone
