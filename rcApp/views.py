@@ -130,12 +130,10 @@ def detail(request, country_code, city_code):
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
-    countryKey = createKey(country_code, city_code)
-
-    current_weather = cache.get(countryKey)
+    current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
     if current_weather is None:
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
-        cache.set(countryKey, current_weather)
+        cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
 
     # current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
     # if current_weather is None:
