@@ -95,7 +95,7 @@ else:
     LOG_DIR = '.'
 
 
-CACHE_PORT = '11211'
+# CACHE_PORT = '11211'
 # Production Environment
 # if ON_OPENSHIFT:
 #     CACHES = {

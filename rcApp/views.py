@@ -12,7 +12,7 @@ from django_countries import countries
 from django_countries.fields import Country
 from timezonefinder import TimezoneFinder
 from twython import Twython
-from django.core.cache import cache
+from django.core.cache import cache, caches
 from django.views.decorators.cache import cache_page
 from .forms import CityForm
 from .models import *
@@ -149,13 +149,14 @@ def detail(request, country_code, city_code):
 
 
   #Cache the news here
-
+    print("this is the caches instances : " + str(caches.all()[0]))
+    print(" ")
     print("this is what cache value is :    " + str(cache.get('news')))
     news = cache.get('news')
     if cache.get('news') == None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
         cache.set('news', 'hello') #timeout is a :day - then the news will refresh
-        print("This is the cache value AFTER 'caching'" + str(cache.get('news')))
+        print("This is the cache value AFTER 'caching' : " + str(cache.get('news')))
         print("caching the news")
 
 
