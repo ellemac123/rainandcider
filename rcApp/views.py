@@ -151,10 +151,12 @@ def detail(request, country_code, city_code):
   #Cache the news for sure
     news = cache.get("news")
     if cache.get("news") == None:
-       # news = getNews(cityAndState, countryName=str(Country(country_code).name))
-        cache.set("news", getNews(cityAndState, countryName=str(Country(country_code).name)), 100)
-        news = cache.get("news")
+        news = getNews(cityAndState, countryName=str(Country(country_code).name))
+        cache.set("news", news, 100)
         print("cacheing the news")
+
+
+
 
     state = getState(str(Country(country_code).name), cityAndState)
 
