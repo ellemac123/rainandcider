@@ -170,10 +170,10 @@ def detail(request, country_code, city_code):
     day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon3_num)
 
     # cache twitter
-    text = cache.get('twitter')
+    text = cache.get('twitter_{}_{}'.format(country_code, city_code))
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('twitter', text, 280000)
+        cache.set('twitter', 'twitter_{}_{}'.format(country_code, city_code), 280000)
 
     local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
