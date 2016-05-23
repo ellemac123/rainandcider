@@ -160,13 +160,6 @@ def detail(request, country_code, city_code):
     icon3_num = current_weather['forecasts'][3]['day']['icon']
     day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon3_num)
 
-    # cache twitter
-    text = cache.get('twitter_{}_{}'.format(country_code, city_code))
-    if text is None:
-        text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('twitter', 'twitter_{}_{}'.format(country_code, city_code), 280000)
-
-
     #cache timezone
     state = cache.get('state_{}_{}'.format(country_code, city_code))
     local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
@@ -176,10 +169,12 @@ def detail(request, country_code, city_code):
         cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
         cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
 
-
+    text = cache.get('twitter_{}_{}'.format(country_code, city_code))
     current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
     if current_time is None:
         current_time = datetime.datetime.now(pytz.timezone(local_timezone))
+        text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
+        cache.set('twitter', 'twitter_{}_{}'.format(country_code, city_code), 60 * 5)
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 60 * 5)
 
 ########## TRYING SOMETHING NEW FROM THIS POINT ON ######
