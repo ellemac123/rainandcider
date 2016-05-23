@@ -149,7 +149,7 @@ def detail(request, country_code, city_code):
 
 
   #Cache the news here
-    print("this is the caches instances : " + str(caches.all()[0]))
+    print("this is the caches instances : " + str(caches.all()))
     print(" ")
     print("this is what cache value is :    " + str(cache.get('news')))
     news = cache.get('news')
