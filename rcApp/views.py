@@ -160,6 +160,13 @@ def detail(request, country_code, city_code):
     icon3_num = current_weather['forecasts'][3]['day']['icon']
     day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon3_num)
 
+    # cache twitter
+    text = cache.get('twitter_{}_{}'.format(country_code, city_code))
+    if text is None:
+        text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
+        cache.set('twitter', 'twitter_{}_{}'.format(country_code, city_code), 60 *5)
+
+
     #cache timezone
     state = cache.get('state_{}_{}'.format(country_code, city_code))
     local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
@@ -169,12 +176,10 @@ def detail(request, country_code, city_code):
         cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
         cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
 
-    text = cache.get('twitter_{}_{}'.format(country_code, city_code))
+
     current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
     if current_time is None:
         current_time = datetime.datetime.now(pytz.timezone(local_timezone))
-        text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('twitter_{}_{}'.format(country_code, city_code), 60 * 5)
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 60 * 5)
 
 ########## TRYING SOMETHING NEW FROM THIS POINT ON ######
@@ -200,8 +205,7 @@ def detail(request, country_code, city_code):
             'humidity': current_weather['current_conditions']['humidity'],
             'day0_high': current_weather['forecasts'][0]['high'],
             'day0_low': current_weather['forecasts'][0]['low'],
-            'speed_units': current_weather['units']['speed'],
-            'twitterText': text[0], 'twitterHandle': text[1],
+            'speed_units': current_weather['units']['speed'], 'twitterText': text[0], 'twitterHandle': text[1],
             'twitterText1': text[2], 'twitterHandle1': text[3], 'twitterText2': text[4], 'twitterHandle2': text[5],
             'timezone': local_timezone, 'current_time': current_time,
             'tommDate': current_weather['forecasts'][1]['date'],
