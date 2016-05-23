@@ -130,12 +130,6 @@ def detail(request, country_code, city_code):
         cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
 
     # this is to handle errors occuring from Queenstown - no current conditions so gets forecast for the day
-    if current_weather['current_conditions']['text'] == '':
-        currentText = current_weather['forecasts'][0]['day']['brief_text']
-        if currentText == '':
-            currentText = 'information is currently unavailable'
-    else:
-        currentText = current_weather['current_conditions']['text'] + ' and'
 
     icon_num = current_weather['current_conditions']['icon']
     # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
@@ -185,6 +179,16 @@ def detail(request, country_code, city_code):
         current_time = datetime.datetime.now(pytz.timezone(local_timezone))
         cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, 280000)
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 280000)
+
+
+
+    if current_weather['current_conditions']['text'] == '':
+        currentText = current_weather['forecasts'][0]['day']['brief_text']
+        if currentText == '':
+            currentText = 'information is currently unavailable'
+    else:
+        currentText = current_weather['current_conditions']['text'] + ' and'
+
 
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
             'current_conditions': currentText,
