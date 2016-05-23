@@ -128,13 +128,13 @@ def detail(request, country_code, city_code):
     cityData = City.objects.get(id=city_code)
 
 
-    current_weather = cache.get('weather')
+    current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
     if current_weather is None:
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
-        cache.set('weather', current_weather)
+        cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
 
 
-        
+
     # this is to handle errors occuring from Queenstown - no current conditions so gets forecast for the day
     if current_weather['current_conditions']['text'] == '':
         currentText = current_weather['forecasts'][0]['day']['brief_text']
