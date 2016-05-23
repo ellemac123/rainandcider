@@ -147,13 +147,14 @@ def detail(request, country_code, city_code):
 
     # Cache the news here
     print("this is the caches instances : " + str(caches.all()))
-    print("this is what cache value is :    " + str(cache.get('news')))
+    print("this is what cache value is :    " + str(cache.get('news_{}_{}'.format(country_code, city_code))))
     news = cache.get('news_{}_{}'.format(country_code, city_code))
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
         cache.set('news_{}_{}'.format(country_code, city_code), news, 280000)  # timeout is a :day - then the news will refresh
         print("This is the cache value AFTER 'caching' : " + str(cache.get('news_{}_{}'.format(country_code, city_code))))
         print("caching the news")
+
 
     # cache state
     print("state cash is " + str(cache.get('state')))
