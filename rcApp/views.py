@@ -38,8 +38,6 @@ def home(request):
         return render(request, 'home/home.html', {'cityform': cityform})
 
 
-
-
 def detail(request, country_code, city_code):
     if country_code not in countries:
         raise Http404("Invalid Country Code")
@@ -84,11 +82,11 @@ def detail(request, country_code, city_code):
         print("caching the news")
 
     #cache state
-    print("state cash is " + str(cache.get('state_{}_{}'.format(country_code, city_code))))
-    state = cache.get('state_{}_{}'.format(country_code, city_code))
+    print("state cash is " + str(cache.get('state')))
+    state = cache.get('state')
     if state is None:
         state = getState(str(Country(country_code).name), cityAndState)
-        cache.set('state_{}_{}'.format(country_code, city_code), state, 280000)
+        cache.set('state', state, 280000)
 
     icon1_num = current_weather['forecasts'][1]['day']['icon']
     day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon1_num)
@@ -145,88 +143,3 @@ def detail(request, country_code, city_code):
             'wind2_direction': current_weather['forecasts'][2]['day']['wind']['text'],
             'wind3_direction': current_weather['forecasts'][3]['day']['wind']['text']}
     return render(request, 'country/detail.html', data)
-
-
-
-
-def getState(countryName, cityState):
-    state = ' '
-    name = str(countryName)
-    if name == 'United States of America':
-        stateCode = cityState[-2:]
-        state = us.states.lookup(stateCode)
-        state = state.name + ', '
-    return ' ' + state
-
-
-
-
-def getNews(cityState, countryName):
-    name = str(countryName)
-    if name == 'United States of America':
-        stateCode = cityState[-2:]
-        state = us.states.lookup(stateCode)
-        state = state.name
-        name = state
-    name = name.replace(' ', '%20')
-
-    try:
-        url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/' + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
-        print(url)
-        list = []
-        f = urllib2.urlopen(url)
-        #f = urllib.request.urlopen(url)
-        content = f.read()
-        decoded_response = content.decode('utf-8')
-        jsonResponse = json.loads(decoded_response)
-
-        length = len(jsonResponse["results"][0]["article_list"]["results"])
-        print("\n\n\nTHIS IS THE LENGTH : " + str(length))
-
-        if length > 0:
-            for x in range(length):
-                list.append(jsonResponse["results"][0]["article_list"]["results"][x]["title"])
-        else:
-            list = ['No Current News to Report']
-
-        return list
-    except:
-        list = ['No News to Report']
-        return list
-
-
-def findTimezone(lat, long):
-    tf = TimezoneFinder()
-    point = (float(long), float(lat))
-    timezoneName = tf.timezone_at(*point)
-
-    return timezoneName
-
-
-def tryTwitter(lat, long):
-    twitter = Twython(TWITTER_KEY, TWITTER_SECRET, oauth_version=2)
-    ACCESS_TOKEN = twitter.obtain_access_token()
-    twitter = Twython(TWITTER_KEY, access_token=ACCESS_TOKEN)
-    geoString = lat + ',' + long + ',150mi'
-    a = twitter.search(q='#news', geocode=geoString, count=10)
-    list_length = len(a['statuses'])
-    print("HERE IS LIST LENGTH OF TWITTERRRR:" + str(list_length))
-
-    try:
-        if list_length > 2:
-            text = a['statuses'][0]['text']
-            twitterHandle = a['statuses'][0]['user']['screen_name']
-            text1 = a['statuses'][1]['text']
-            twitterHandle1 = a['statuses'][1]['user']['screen_name']
-            text2 = a['statuses'][2]['text']
-            twitterHandle2 = a['statuses'][2]['user']['screen_name']
-            myList = [text, twitterHandle, text1, twitterHandle1, text2, twitterHandle2]
-        else:
-            raise Exception
-    except:
-        text = 'no news to report'
-        twitterHandle = ''
-        myList = [text, twitterHandle, text, twitterHandle, text, twitterHandle, ]  # , text1, twitterHandle1]
-
-    return myList;
-
