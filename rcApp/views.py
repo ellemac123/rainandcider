@@ -20,7 +20,7 @@ from .models import *
 twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
-
+CACHE_TIME_DAY = 86400
 
 @cache_page(60 * 5)
 def home(request):
@@ -135,11 +135,6 @@ def detail(request, country_code, city_code):
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
         cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
 
-    # current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
-    # if current_weather is None:
-    #     current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
-    #     cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
-
     # this is to handle errors occuring from Queenstown - no current conditions so gets forecast for the day
 
     icon_num = current_weather['current_conditions']['icon']
@@ -150,23 +145,13 @@ def detail(request, country_code, city_code):
     current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
     cityAndState = current_weather['location']['name']
 
-    # Cache the news here
-    print("this is the caches instances : " + str(caches.all()))
-    print("this is what cache value is :    " + str(cache.get('news_{}_{}'.format(country_code, city_code))))
     news = cache.get('news_{}_{}'.format(country_code, city_code))
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
-        cache.set('news_{}_{}'.format(country_code, city_code), news, 280000)  # timeout is a :day - then the news will refresh
+        cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)  # timeout is a :day - then the news will refresh
         print("This is the cache value AFTER 'caching' : " + str(cache.get('news_{}_{}'.format(country_code, city_code))))
         print("caching the news")
 
-
-    # cache state
-    print("state cash is " + str(cache.get('state')))
-    state = cache.get('state_{}_{}'.format(country_code, city_code))
-    if state is None:
-        state = getState(str(Country(country_code).name), cityAndState)
-        cache.set('state_{}_{}'.format(country_code, city_code), state, 280000)
 
     icon1_num = current_weather['forecasts'][1]['day']['icon']
     day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon1_num)
@@ -183,13 +168,19 @@ def detail(request, country_code, city_code):
 
 
     #cache timezone
+    state = cache.get('state_{}_{}'.format(country_code, city_code))
     local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
-    current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
-    if local_timezone is None or current_time is None:
+    if local_timezone is None or state is None:
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
+        state = getState(str(Country(country_code).name), cityAndState)
+        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
+        cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
+
+
+    current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
+    if current_time is None:
         current_time = datetime.datetime.now(pytz.timezone(local_timezone))
-        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, 280000)
-        cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 280000)
+        cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 60 * 5)
 
 ########## TRYING SOMETHING NEW FROM THIS POINT ON ######
 
