@@ -131,13 +131,13 @@ def detail(request, country_code, city_code):
     current_icon = cache.get('currentIcon_{}_{}'.format(country_code, city_code))
     icons = cache.get('icon_{}_{}'.format(country_code, city_code))
     current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
-    if current_weather is None or icons is None:
+    if current_weather is None or icons is None or current_icon is None:
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
         current_icon = getCurrentIcon(current_weather)
         icons = getIcons(current_weather)
         cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
-        cache.set('currentIcon_{}_{}'.format(country_code, city_code))
-        cache.set('icon_{}_{}'.format(country_code, city_code))
+        cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon)
+        cache.set('icon_{}_{}'.format(country_code, city_code), icons)
 
     cityAndState = current_weather['location']['name']
 
