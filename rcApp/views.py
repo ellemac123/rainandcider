@@ -159,7 +159,7 @@ def detail(request, country_code, city_code):
     text = cache.get('twitter_{}_{}'.format(country_code, city_code))
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('twitter_{}_{}'.format(country_code, text, city_code), 60 * 5)
+        cache.set('twitter_{}_{}'.format(country_code, city_code), text, 60 * 5)
 
 
     #cache timezone
