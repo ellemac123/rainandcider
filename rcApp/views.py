@@ -142,11 +142,7 @@ def detail(request, country_code, city_code):
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
         cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)
 
-
-    day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
-    day2_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][2]['day']['icon'])
-    day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][3]['day']['icon'])
-
+    icons = getIcons(current_weather)
 
     #cache timezone
     state = cache.get('state_{}_{}'.format(country_code, city_code))
@@ -187,15 +183,15 @@ def detail(request, country_code, city_code):
             'tommDate': current_weather['forecasts'][1]['date'],
             'news': news,
             'date2': current_weather['forecasts'][2]['date'], 'date3': current_weather['forecasts'][3]['date'],
-            'day1forecast': current_weather['forecasts'][1]['day']['brief_text'], 'day1Icon': day1_icon,
+            'day1forecast': current_weather['forecasts'][1]['day']['brief_text'], 'day1Icon': icons[0],
             'day1_precip': current_weather['forecasts'][1]['day']['chance_precip'],
             'day1_high': current_weather['forecasts'][1]['high'],
             'day1_low': current_weather['forecasts'][1]['low'],
-            'day2forecast': current_weather['forecasts'][2]['day']['brief_text'], 'day2Icon': day2_icon,
+            'day2forecast': current_weather['forecasts'][2]['day']['brief_text'], 'day2Icon': icons[1],
             'day2_precip': current_weather['forecasts'][2]['day']['chance_precip'],
             'day2_high': current_weather['forecasts'][2]['high'],
             'day2_low': current_weather['forecasts'][2]['low'],
-            'day3forecast': current_weather['forecasts'][3]['day']['brief_text'], 'day3Icon': day3_icon,
+            'day3forecast': current_weather['forecasts'][3]['day']['brief_text'], 'day3Icon': icons[2],
             'day3_precip': current_weather['forecasts'][3]['day']['chance_precip'],
             'day3_high': current_weather['forecasts'][3]['high'],
             'day3_low': current_weather['forecasts'][3]['low'],
@@ -227,3 +223,10 @@ def getCurrentIcon(current_weather):
 
     current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
     return current_icon
+
+def getIcons(current_weather):
+    day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
+    day2_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][2]['day']['icon'])
+    day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][3]['day']['icon'])
+    icons = [day1_icon, day2_icon, day3_icon]
+    return icons
