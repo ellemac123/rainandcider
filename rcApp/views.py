@@ -174,7 +174,7 @@ def detail(request, country_code, city_code):
     if current_time is None:
         current_time = datetime.datetime.now(pytz.timezone(local_timezone))
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('twitter', 'twitter_{}_{}'.format(country_code, city_code), 60 * 5)
+        cache.set('twitter_{}_{}'.format(country_code, city_code), 60 * 5)
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 60 * 5)
 
 ########## TRYING SOMETHING NEW FROM THIS POINT ON ######
