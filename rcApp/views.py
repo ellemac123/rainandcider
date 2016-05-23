@@ -60,7 +60,6 @@ def getNews(cityState, countryName):
 
     try:
         url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/' + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
-        print(url)
         list = []
         f = urllib2.urlopen(url)
         # f = urllib.request.urlopen(url)
@@ -69,7 +68,6 @@ def getNews(cityState, countryName):
         jsonResponse = json.loads(decoded_response)
 
         length = len(jsonResponse["results"][0]["article_list"]["results"])
-        print("\n\n\nTHIS IS THE LENGTH : " + str(length))
 
         if length > 0:
             for x in range(length):
@@ -98,7 +96,6 @@ def tryTwitter(lat, long):
     geoString = lat + ',' + long + ',150mi'
     a = twitter.search(q='#news', geocode=geoString, count=10)
     list_length = len(a['statuses'])
-    print("HERE IS LIST LENGTH OF TWITTERRRR:" + str(list_length))
 
     try:
         if list_length > 2:
@@ -149,8 +146,6 @@ def detail(request, country_code, city_code):
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
         cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)  # timeout is a :day - then the news will refresh
-        print("This is the cache value AFTER 'caching' : " + str(cache.get('news_{}_{}'.format(country_code, city_code))))
-        print("caching the news")
 
 
     icon1_num = current_weather['forecasts'][1]['day']['icon']
@@ -164,7 +159,7 @@ def detail(request, country_code, city_code):
     text = cache.get('twitter_{}_{}'.format(country_code, city_code))
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('twitter_{}_{}'.format(country_code, city_code), 60 * 5)
+        cache.set('twitter_{}_{}'.format(country_code, text, city_code), 60 * 5)
 
 
     #cache timezone
