@@ -119,15 +119,28 @@ def tryTwitter(lat, long):
     return myList;
 
 
+def createKey(country_code, city_code):
+    key = 'key_{}_{}'.format(country_code, city_code)
+    return key
+
+
+
 def detail(request, country_code, city_code):
     if country_code not in countries:
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
-    current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
+    countryKey = createKey(country_code, city_code)
+
+    current_weather = cache.get(countryKey)
     if current_weather is None:
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
-        cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
+        cache.set(countryKey, current_weather)
+
+    # current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
+    # if current_weather is None:
+    #     current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
+    #     cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
 
     # this is to handle errors occuring from Queenstown - no current conditions so gets forecast for the day
 
@@ -180,6 +193,7 @@ def detail(request, country_code, city_code):
         cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, 280000)
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 280000)
 
+########## TRYING SOMETHING NEW FROM THIS POINT ON ######
 
 
     if current_weather['current_conditions']['text'] == '':
@@ -227,3 +241,4 @@ def detail(request, country_code, city_code):
             'wind2_direction': current_weather['forecasts'][2]['day']['wind']['text'],
             'wind3_direction': current_weather['forecasts'][3]['day']['wind']['text']}
     return render(request, 'country/detail.html', data)
+
