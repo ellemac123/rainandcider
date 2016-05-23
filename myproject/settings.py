@@ -95,16 +95,16 @@ else:
     LOG_DIR = '.'
 
 
-CACHE_PORT = '11211'
-# Production Environment
-if ON_OPENSHIFT:
-    CACHES = {
-        'default': {
-            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-            'LOCATION': '%s:%s' % (os.environ['OPENSHIFT_PYTHON_IP'], CACHE_PORT),
-        }
-    }
-
+# CACHE_PORT = '11211'
+# #Production Environment
+# if ON_OPENSHIFT:
+#     CACHES = {
+#         'default': {
+#             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#             'LOCATION': '%s:%s' % (os.environ['OPENSHIFT_PYTHON_IP'], CACHE_PORT),
+#         }
+#     }
+#
 # # Development Environment
 # else:
 #     CACHES = {
