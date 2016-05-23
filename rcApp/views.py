@@ -157,10 +157,10 @@ def detail(request, country_code, city_code):
 
     # cache state
     print("state cash is " + str(cache.get('state')))
-    state = cache.get('state')
+    state = cache.get('state_{}_{}'.format(country_code, city_code))
     if state is None:
         state = getState(str(Country(country_code).name), cityAndState)
-        cache.set('state', state, 280000)
+        cache.set('state_{}_{}'.format(country_code, city_code), state, 280000)
 
     icon1_num = current_weather['forecasts'][1]['day']['icon']
     day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon1_num)
