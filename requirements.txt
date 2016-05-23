@@ -9,3 +9,4 @@ us
 timezonefinder
 pywapi
 python-memcached
+memcached

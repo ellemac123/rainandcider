@@ -4,6 +4,7 @@ import pywapi
 import pytz
 import datetime
 import us
+
 from django.contrib import messages
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -144,6 +145,9 @@ def detail(request, country_code, city_code):
     current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
     cityAndState = current_weather['location']['name']
 
+
+
+  #Cache the news for sure
     news = getNews(cityAndState, countryName=str(Country(country_code).name))
 
     state = getState(str(Country(country_code).name), cityAndState)
