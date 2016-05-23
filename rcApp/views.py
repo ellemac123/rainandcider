@@ -183,8 +183,8 @@ def detail(request, country_code, city_code):
     if local_timezone is None or current_time is None:
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
         current_time = datetime.datetime.now(pytz.timezone(local_timezone))
-        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone)
-        cache.set('currentTime_{}_{}'.format(country_code, city_code))
+        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, 280000)
+        cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 280000)
 
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
             'current_conditions': currentText,
