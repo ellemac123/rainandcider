@@ -12,6 +12,7 @@ from django_countries import countries
 from django_countries.fields import Country
 from timezonefinder import TimezoneFinder
 from twython import Twython
+from django.core.cache import cache
 from django.views.decorators.cache import cache_page
 from .forms import CityForm
 from .models import *
@@ -148,7 +149,12 @@ def detail(request, country_code, city_code):
 
 
   #Cache the news for sure
-    news = getNews(cityAndState, countryName=str(Country(country_code).name))
+    news = cache.get("news")
+    if cache.get("news") == None:
+       # news = getNews(cityAndState, countryName=str(Country(country_code).name))
+        cache.set("news", getNews(cityAndState, countryName=str(Country(country_code).name)), 100)
+        news = cache.get("news")
+        print("cacheing the news")
 
     state = getState(str(Country(country_code).name), cityAndState)
 
