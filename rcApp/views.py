@@ -134,18 +134,13 @@ def detail(request, country_code, city_code):
 
     # this is to handle errors occuring from Queenstown - no current conditions so gets forecast for the day
 
-    icon_num = current_weather['current_conditions']['icon']
-    # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
-    if icon_num == '':
-        icon_num = current_weather['forecasts'][0]['day']['icon']
-
-    current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
+    current_icon = getCurrentIcon(current_weather)
     cityAndState = current_weather['location']['name']
 
     news = cache.get('news_{}_{}'.format(country_code, city_code))
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
-        cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)  # timeout is a :day - then the news will refresh
+        cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)
 
 
     icon1_num = current_weather['forecasts'][1]['day']['icon']
@@ -164,6 +159,7 @@ def detail(request, country_code, city_code):
         state = getState(str(Country(country_code).name), cityAndState)
         cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
         cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
+
 
     text = cache.get('twitter_{}_{}'.format(country_code, city_code))
     current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
@@ -224,3 +220,13 @@ def currentWeatherErrorCheck(current_weather):
         currentText = current_weather['current_conditions']['text'] + ' and'
 
     return currentText
+
+
+def getCurrentIcon(current_weather):
+    icon_num = current_weather['current_conditions']['icon']
+    # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
+    if icon_num == '':
+        icon_num = current_weather['forecasts'][0]['day']['icon']
+
+    current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
+    return current_icon
