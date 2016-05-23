@@ -127,8 +127,11 @@ def detail(request, country_code, city_code):
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
-    current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
 
+    current_weather = cache.get('weather')
+    if current_weather is None:
+        current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
+        cache.set('weather', )
     # this is to handle errors occuring from Queenstown - no current conditions so gets forecast for the day
     if current_weather['current_conditions']['text'] == '':
         currentText = current_weather['forecasts'][0]['day']['brief_text']
@@ -148,7 +151,7 @@ def detail(request, country_code, city_code):
 
 
 
-  #Cache the news here
+    #Cache the news here
     print("this is the caches instances : " + str(caches.all()))
     print(" ")
     print("this is what cache value is :    " + str(cache.get('news')))
@@ -159,10 +162,12 @@ def detail(request, country_code, city_code):
         print("This is the cache value AFTER 'caching' : " + str(cache.get('news')))
         print("caching the news")
 
-
-
-
-    state = getState(str(Country(country_code).name), cityAndState)
+    #cache state
+    print("state cash is " + str(cache.get('state')))
+    state = cache.get('state')
+    if state is None:
+        state = getState(str(Country(country_code).name), cityAndState)
+        cache.set('state', state, 280000)
 
     icon1_num = current_weather['forecasts'][1]['day']['icon']
     day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon1_num)
@@ -171,7 +176,13 @@ def detail(request, country_code, city_code):
     icon3_num = current_weather['forecasts'][3]['day']['icon']
     day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon3_num)
 
-    text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
+    #cache twitter
+    text = cache.get('twitter')
+    if text is None:
+        text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
+        cache.set('twitter', text, 280000)
+
+
     local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
