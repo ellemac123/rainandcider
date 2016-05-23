@@ -182,15 +182,7 @@ def detail(request, country_code, city_code):
         current_time = datetime.datetime.now(pytz.timezone(local_timezone))
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 60 * 5)
 
-########## TRYING SOMETHING NEW FROM THIS POINT ON ######
-
-
-    if current_weather['current_conditions']['text'] == '':
-        currentText = current_weather['forecasts'][0]['day']['brief_text']
-        if currentText == '':
-            currentText = 'information is currently unavailable'
-    else:
-        currentText = current_weather['current_conditions']['text'] + ' and'
+    currentText = currentWeatherErrorCheck(current_weather)
 
 
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
@@ -231,3 +223,12 @@ def detail(request, country_code, city_code):
             'wind3_direction': current_weather['forecasts'][3]['day']['wind']['text']}
     return render(request, 'country/detail.html', data)
 
+def currentWeatherErrorCheck(current_weather):
+    if current_weather['current_conditions']['text'] == '':
+        currentText = current_weather['forecasts'][0]['day']['brief_text']
+        if currentText == '':
+            currentText = 'information is currently unavailable'
+    else:
+        currentText = current_weather['current_conditions']['text'] + ' and'
+
+    return currentText
