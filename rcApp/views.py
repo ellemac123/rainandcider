@@ -21,6 +21,7 @@ twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 
+
 @cache_page(60 * 5)
 def home(request):
     cityform = CityForm()
@@ -48,8 +49,6 @@ def getState(countryName, cityState):
     return ' ' + state
 
 
-
-
 def getNews(cityState, countryName):
     name = str(countryName)
     if name == 'United States of America':
@@ -64,7 +63,7 @@ def getNews(cityState, countryName):
         print(url)
         list = []
         f = urllib2.urlopen(url)
-        #f = urllib.request.urlopen(url)
+        # f = urllib.request.urlopen(url)
         content = f.read()
         decoded_response = content.decode('utf-8')
         jsonResponse = json.loads(decoded_response)
@@ -120,20 +119,15 @@ def tryTwitter(lat, long):
     return myList;
 
 
-
-
 def detail(request, country_code, city_code):
     if country_code not in countries:
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
-
     current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
     if current_weather is None:
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
         cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
-
-
 
     # this is to handle errors occuring from Queenstown - no current conditions so gets forecast for the day
     if current_weather['current_conditions']['text'] == '':
@@ -143,7 +137,6 @@ def detail(request, country_code, city_code):
     else:
         currentText = current_weather['current_conditions']['text'] + ' and'
 
-
     icon_num = current_weather['current_conditions']['icon']
     # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
     if icon_num == '':
@@ -152,20 +145,17 @@ def detail(request, country_code, city_code):
     current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
     cityAndState = current_weather['location']['name']
 
-
-
-    #Cache the news here
+    # Cache the news here
     print("this is the caches instances : " + str(caches.all()))
-    print(" ")
     print("this is what cache value is :    " + str(cache.get('news')))
-    news = cache.get('news')
-    if cache.get('news') is None:
+    news = cache.get('news_{}_{}'.format(country_code, city_code))
+    if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
-        cache.set('news', news, 280000) #timeout is a :day - then the news will refresh
-        print("This is the cache value AFTER 'caching' : " + str(cache.get('news')))
+        cache.set('news_{}_{}'.format(country_code, city_code), news, 280000)  # timeout is a :day - then the news will refresh
+        print("This is the cache value AFTER 'caching' : " + str(cache.get('news_{}_{}'.format(country_code, city_code))))
         print("caching the news")
 
-    #cache state
+    # cache state
     print("state cash is " + str(cache.get('state')))
     state = cache.get('state')
     if state is None:
@@ -179,16 +169,14 @@ def detail(request, country_code, city_code):
     icon3_num = current_weather['forecasts'][3]['day']['icon']
     day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon3_num)
 
-    #cache twitter
+    # cache twitter
     text = cache.get('twitter')
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
         cache.set('twitter', text, 280000)
 
-
     local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
-
 
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
             'current_conditions': currentText,
