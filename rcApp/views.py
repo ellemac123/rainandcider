@@ -22,7 +22,7 @@ TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 CACHE_TIME_DAY = 86400
 
-@cache_page(60 * 5)
+@cache_page(60 * 15)
 def home(request):
     cityform = CityForm()
 
@@ -164,7 +164,7 @@ def detail(request, country_code, city_code):
     text = cache.get('twitter_{}_{}'.format(country_code, city_code))
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('twitter', 'twitter_{}_{}'.format(country_code, city_code), 60 *5)
+        cache.set('twitter_{}_{}'.format(country_code, city_code), 60 * 5)
 
 
     #cache timezone
@@ -183,7 +183,6 @@ def detail(request, country_code, city_code):
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, 60 * 5)
 
     currentText = currentWeatherErrorCheck(current_weather)
-
 
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
             'current_conditions': currentText,
@@ -222,6 +221,7 @@ def detail(request, country_code, city_code):
             'wind2_direction': current_weather['forecasts'][2]['day']['wind']['text'],
             'wind3_direction': current_weather['forecasts'][3]['day']['wind']['text']}
     return render(request, 'country/detail.html', data)
+
 
 def currentWeatherErrorCheck(current_weather):
     if current_weather['current_conditions']['text'] == '':
