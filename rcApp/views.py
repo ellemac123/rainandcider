@@ -23,7 +23,7 @@ TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 CACHE_TIME_DAY = 86400
 CACHE_TIME_FIVE = 60 * 5
 
-# @cache_page(60 * 40)
+@cache_page(60 * 40)
 def home(request):
     cityform = CityForm()
 
@@ -45,32 +45,26 @@ def detail(request, country_code, city_code):
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
-    current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
-    if current_weather is None:
-        current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
-        cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
 
     local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
+    current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
     current_icon = cache.get('currentIcon_{}_{}'.format(country_code, city_code))
     icons = cache.get('icon_{}_{}'.format(country_code, city_code))
-    if icons is None or current_icon is None or local_timezone is None:
+    current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
+    if current_weather is None or current_time is None or icons is None or current_icon is None or local_timezone is None:
+        current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
         current_icon = getCurrentIcon(current_weather)
         icons = getIcons(current_weather)
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
+        current_time = datetime.datetime.now(pytz.timezone(local_timezone))
+        cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
         cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon, CACHE_TIME_FIVE)
         cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
         cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_FIVE)
-
-    print()
-    print("Starting time cache value is : " + str(cache.get('currentTime_{}_{}'.format(country_code, city_code))))
-    current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
-    if current_time is None:
-        current_time = datetime.datetime.now(pytz.timezone(local_timezone))
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
 
     currentText = currentWeatherErrorCheck(current_weather)
     cityAndState = current_weather['location']['name']
-    print("Ending time cache value is : " + str(cache.get('currentTime_{}_{}'.format(country_code, city_code))))
 
     news = cache.get('news_{}_{}'.format(country_code, city_code))
     if news is None:
