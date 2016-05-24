@@ -61,11 +61,11 @@ def detail(request, country_code, city_code):
         cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_FIVE)
 
 
+
     current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
     if current_time is None:
         current_time = datetime.datetime.now(pytz.timezone(local_timezone))
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
-
 
 
     currentText = currentWeatherErrorCheck(current_weather)
