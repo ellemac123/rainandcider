@@ -55,7 +55,6 @@ def detail(request, country_code, city_code):
         current_icon = getCurrentIcon(current_weather)
         icons = getIcons(current_weather)
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
-        current_time = datetime.datetime.now(pytz.timezone(local_timezone))
         cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
         cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon, CACHE_TIME_FIVE)
         cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
@@ -64,6 +63,7 @@ def detail(request, country_code, city_code):
 
     current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
     if current_time is None:
+        current_time = datetime.datetime.now(pytz.timezone(local_timezone))
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
 
 
