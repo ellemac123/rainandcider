@@ -23,7 +23,7 @@ TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 CACHE_TIME_DAY = 86400
 CACHE_TIME_FIVE = 60 * 5
 
-@cache_page(60 * 40)
+# @cache_page(60 * 40)
 def home(request):
     cityform = CityForm()
 
@@ -45,6 +45,8 @@ def detail(request, country_code, city_code):
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
+    print()
+    print("Starting time cache value is : " + str(cache.get('currentTime_{}_{}'.format(country_code, city_code))))
     local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
     current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
     current_icon = cache.get('currentIcon_{}_{}'.format(country_code, city_code))
@@ -64,6 +66,7 @@ def detail(request, country_code, city_code):
 
     currentText = currentWeatherErrorCheck(current_weather)
     cityAndState = current_weather['location']['name']
+    print("Ending time cache value is : " + str(cache.get('currentTime_{}_{}'.format(country_code, city_code))))
 
     news = cache.get('news_{}_{}'.format(country_code, city_code))
     if news is None:
