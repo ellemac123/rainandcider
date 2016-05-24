@@ -46,17 +46,9 @@ def detail(request, country_code, city_code):
     cityData = City.objects.get(id=city_code)
 
 
-    current_icon = cache.get('currentIcon_{}_{}'.format(country_code, city_code))
-    icons = cache.get('icon_{}_{}'.format(country_code, city_code))
-    current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
-    if current_weather is None or icons is None or current_icon is None:
-        current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
-        current_icon = getCurrentIcon(current_weather)
-        icons = getIcons(current_weather)
-        cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
-        cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon, CACHE_TIME_FIVE)
-        cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
-
+    current_weather = fetchCurrentWeather(country_code, city_code, cityData)
+    current_icon = fetchCurrentIcon(country_code, city_code, current_weather)
+    icons = fetchIcons(country_code, city_code, current_weather)
     local_timezone = fetchTimezone(country_code, city_code, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
@@ -240,8 +232,29 @@ def fetchTimezone(country_code, city_code, current_weather):
     local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
     if local_timezone is None:
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_FIVE)
+        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
     return local_timezone
+
+def fetchCurrentIcon(country_code, city_code, current_weather):
+    current_icon = cache.get('currentIcon_{}_{}'.format(country_code, city_code))
+    if current_icon is None:
+        current_icon = getCurrentIcon(current_weather)
+        cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon, CACHE_TIME_FIVE)
+    return current_icon
+
+def fetchIcons(country_code, city_code, current_weather):
+    icons = cache.get('icon_{}_{}'.format(country_code, city_code))
+    if icons is None:
+        icons = getIcons(current_weather)
+        cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
+    return icons
+
+def fetchCurrentWeather(country_code, city_code, cityData):
+    current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
+    if current_weather is None:
+        current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
+        cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
+    return current_weather
 
     #
     # current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
