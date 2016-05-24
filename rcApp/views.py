@@ -1,19 +1,19 @@
-import json
-import urllib2
-import pywapi
-import pytz
 import datetime
-import us
+import json
 
+import pytz
+import pywapi
+import urllib2
+import us
 from django.contrib import messages
+from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import redirect, render
-from django_countries import countries
+from django.views.decorators.cache import cache_page
 from django_countries.fields import Country
 from timezonefinder import TimezoneFinder
 from twython import Twython
-from django.core.cache import cache, caches
-from django.views.decorators.cache import cache_page
+
 from .forms import CityForm
 from .models import *
 
@@ -22,6 +22,7 @@ TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 CACHE_TIME_DAY = 86400
 CACHE_TIME_FIVE = 60 * 5
+
 
 @cache_page(60 * 40)
 def home(request):
@@ -44,7 +45,6 @@ def detail(request, country_code, city_code):
     if country_code not in countries:
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
-
 
     current_weather = fetchCurrentWeather(country_code, city_code, cityData)
     current_icon = fetchCurrentIcon(country_code, city_code, current_weather)
@@ -123,13 +123,13 @@ def getCurrentIcon(current_weather):
     current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
     return current_icon
 
+
 def getIcons(current_weather):
     day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
     day2_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][2]['day']['icon'])
     day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][3]['day']['icon'])
     icons = [day1_icon, day2_icon, day3_icon]
     return icons
-
 
 
 def getState(countryName, cityState):
@@ -213,12 +213,14 @@ def createKey(country_code, city_code):
     key = 'key_{}_{}'.format(country_code, city_code)
     return key
 
+
 def fetchNews(country_code, city_code, cityAndState):
     news = cache.get('news_{}_{}'.format(country_code, city_code))
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
         cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)
     return news
+
 
 def fetchState(country_code, city_code, cityAndState):
     state = cache.get('state_{}_{}'.format(country_code, city_code))
@@ -235,6 +237,7 @@ def fetchTimezone(country_code, city_code, current_weather):
         cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
     return local_timezone
 
+
 def fetchCurrentIcon(country_code, city_code, current_weather):
     current_icon = cache.get('currentIcon_{}_{}'.format(country_code, city_code))
     if current_icon is None:
@@ -242,12 +245,14 @@ def fetchCurrentIcon(country_code, city_code, current_weather):
         cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon, CACHE_TIME_FIVE)
     return current_icon
 
+
 def fetchIcons(country_code, city_code, current_weather):
     icons = cache.get('icon_{}_{}'.format(country_code, city_code))
     if icons is None:
         icons = getIcons(current_weather)
         cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
     return icons
+
 
 def fetchCurrentWeather(country_code, city_code, cityData):
     current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
@@ -261,4 +266,3 @@ def fetchCurrentWeather(country_code, city_code, cityData):
     # if current_time is None:
     #     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
     #     cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
-
