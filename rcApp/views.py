@@ -71,10 +71,7 @@ def detail(request, country_code, city_code):
 
 
     cityAndState = current_weather['location']['name']
-    news = cache.get('news_{}_{}'.format(country_code, city_code))
-    if news is None:
-        news = getNews(cityAndState, countryName=str(Country(country_code).name))
-        cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)
+    news=fetchNews(country_code, city_code, cityAndState)
 
 
     state = cache.get('state_{}_{}'.format(country_code, city_code))
@@ -240,3 +237,10 @@ def createKey(country_code, city_code):
     key = 'key_{}_{}'.format(country_code, city_code)
     return key
 
+def fetchNews(country_code, city_code, cityAndState):
+    news = cache.get('news_{}_{}'.format(country_code, city_code))
+    if news is None:
+        news = getNews(cityAndState, countryName=str(Country(country_code).name))
+        cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)
+
+    return news
