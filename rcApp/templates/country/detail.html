@@ -44,8 +44,9 @@
 
 
     <h1 id="detailCountryName">Welcome to {{city}},{{state}}{{country.name}}</h1>
+    {% localtime off %}
     <h2 id="timeHeader">{{current_time}}</h2>
-
+    {% endlocaltime %}
 
 
     <div class="card-columns">
