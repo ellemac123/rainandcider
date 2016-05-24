@@ -109,24 +109,6 @@ def currentWeatherErrorCheck(current_weather):
     return currentText
 
 
-def getCurrentIcon(current_weather):
-    icon_num = current_weather['current_conditions']['icon']
-    # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
-    if icon_num == '':
-        icon_num = current_weather['forecasts'][0]['day']['icon']
-
-    current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
-    return current_icon
-
-
-def getIcons(current_weather):
-    day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
-    day2_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][2]['day']['icon'])
-    day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][3]['day']['icon'])
-    icons = [day1_icon, day2_icon, day3_icon]
-    return icons
-
-
 def getState(countryName, cityState):
     state = ' '
     name = str(countryName)
@@ -204,11 +186,6 @@ def tryTwitter(lat, long):
     return myList;
 
 
-def createKey(country_code, city_code):
-    key = 'key_{}_{}'.format(country_code, city_code)
-    return key
-
-
 def fetchNews(country_code, city_code, cityAndState):
     news = cache.get('news_{}_{}'.format(country_code, city_code))
     if news is None:
@@ -236,7 +213,11 @@ def fetchTimezone(country_code, city_code, current_weather):
 def fetchCurrentIcon(country_code, city_code, current_weather):
     current_icon = cache.get('currentIcon_{}_{}'.format(country_code, city_code))
     if current_icon is None:
-        current_icon = getCurrentIcon(current_weather)
+        icon_num = current_weather['current_conditions']['icon']
+        # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
+        if icon_num == '':
+            icon_num = current_weather['forecasts'][0]['day']['icon']
+        current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
         cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon, CACHE_TIME_FIVE)
     return current_icon
 
@@ -244,7 +225,10 @@ def fetchCurrentIcon(country_code, city_code, current_weather):
 def fetchIcons(country_code, city_code, current_weather):
     icons = cache.get('icon_{}_{}'.format(country_code, city_code))
     if icons is None:
-        icons = getIcons(current_weather)
+        day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
+        day2_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][2]['day']['icon'])
+        day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][3]['day']['icon'])
+        icons = [day1_icon, day2_icon, day3_icon]
         cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
     return icons
 
