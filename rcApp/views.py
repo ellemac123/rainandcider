@@ -47,11 +47,10 @@ def detail(request, country_code, city_code):
 
 
     local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
-    current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
     current_icon = cache.get('currentIcon_{}_{}'.format(country_code, city_code))
     icons = cache.get('icon_{}_{}'.format(country_code, city_code))
     current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
-    if current_weather is None or current_time is None or icons is None or current_icon is None or local_timezone is None:
+    if current_weather is None or icons is None or current_icon is None or local_timezone is None:
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
         current_icon = getCurrentIcon(current_weather)
         icons = getIcons(current_weather)
@@ -61,7 +60,13 @@ def detail(request, country_code, city_code):
         cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon, CACHE_TIME_FIVE)
         cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
         cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_FIVE)
+
+
+    current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
+    if current_time is None:
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
+
+
 
     currentText = currentWeatherErrorCheck(current_weather)
     cityAndState = current_weather['location']['name']
