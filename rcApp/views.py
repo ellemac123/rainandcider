@@ -68,9 +68,7 @@ def detail(request, country_code, city_code):
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
 
 
-    currentText = currentWeatherErrorCheck(current_weather)
     cityAndState = current_weather['location']['name']
-
     news = cache.get('news_{}_{}'.format(country_code, city_code))
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
@@ -88,6 +86,7 @@ def detail(request, country_code, city_code):
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
         cache.set('twitter_{}_{}'.format(country_code, city_code), text, CACHE_TIME_FIVE)
 
+    currentText = currentWeatherErrorCheck(current_weather)
 
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
             'current_conditions': currentText,
