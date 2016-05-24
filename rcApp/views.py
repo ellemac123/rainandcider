@@ -55,12 +55,7 @@ def detail(request, country_code, city_code):
     cityAndState = current_weather['location']['name']
     news = fetchNews(country_code, city_code, cityAndState)
     state = fetchState(country_code, city_code, cityAndState)
-
-    text = cache.get('twitter_{}_{}'.format(country_code, city_code))
-    if text is None:
-        text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('twitter_{}_{}'.format(country_code, city_code), text, CACHE_TIME_FIVE)
-
+    text = fetchTwitter(country_code, city_code, current_weather)
     currentText = currentWeatherErrorCheck(current_weather)
 
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
@@ -260,6 +255,15 @@ def fetchCurrentWeather(country_code, city_code, cityData):
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
         cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
     return current_weather
+
+
+def fetchTwitter(country_code, city_code, current_weather):
+    text = cache.get('twitter_{}_{}'.format(country_code, city_code))
+    if text is None:
+        text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
+        cache.set('twitter_{}_{}'.format(country_code, city_code), text, CACHE_TIME_FIVE)
+    return text
+
 
     #
     # current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
