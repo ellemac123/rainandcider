@@ -56,10 +56,10 @@ def detail(request, country_code, city_code):
         icons = getIcons(current_weather)
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
         current_time = datetime.datetime.now(pytz.timezone(local_timezone))
-        cache.set('weather_{}_{}'.format(country_code, city_code), current_weather)
-        cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon)
-        cache.set('icon_{}_{}'.format(country_code, city_code), icons)
-        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
+        cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
+        cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon, CACHE_TIME_FIVE)
+        cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
+        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_FIVE)
         cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
 
     currentText = currentWeatherErrorCheck(current_weather)
@@ -97,7 +97,8 @@ def detail(request, country_code, city_code):
             'day0_low': current_weather['forecasts'][0]['low'],
             'speed_units': current_weather['units']['speed'], 'twitterText': text[0], 'twitterHandle': text[1],
             'twitterText1': text[2], 'twitterHandle1': text[3], 'twitterText2': text[4], 'twitterHandle2': text[5],
-            'timezone': local_timezone, 'current_time': current_time,
+            'timezone': local_timezone,
+            'current_time': current_time,
             'tommDate': current_weather['forecasts'][1]['date'],
             'news': news,
             'date2': current_weather['forecasts'][2]['date'], 'date3': current_weather['forecasts'][3]['date'],
