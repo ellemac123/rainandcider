@@ -46,39 +46,23 @@ def detail(request, country_code, city_code):
     cityData = City.objects.get(id=city_code)
 
 
-    local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
     current_icon = cache.get('currentIcon_{}_{}'.format(country_code, city_code))
     icons = cache.get('icon_{}_{}'.format(country_code, city_code))
     current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
-    if current_weather is None or icons is None or current_icon is None or local_timezone is None:
+    if current_weather is None or icons is None or current_icon is None:
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
         current_icon = getCurrentIcon(current_weather)
         icons = getIcons(current_weather)
-        local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
         cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
         cache.set('currentIcon_{}_{}'.format(country_code, city_code), current_icon, CACHE_TIME_FIVE)
         cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
-        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_FIVE)
 
+    local_timezone = fetchTimezone(country_code, city_code, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
-
-    #
-    # current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
-    # if current_time is None:
-    #     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
-    #     cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
-
-
     cityAndState = current_weather['location']['name']
-    news=fetchNews(country_code, city_code, cityAndState)
-
-
-    state = cache.get('state_{}_{}'.format(country_code, city_code))
-    if state is None:
-        state = getState(str(Country(country_code).name), cityAndState)
-        cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
-
+    news = fetchNews(country_code, city_code, cityAndState)
+    state = fetchState(country_code, city_code, cityAndState)
 
     text = cache.get('twitter_{}_{}'.format(country_code, city_code))
     if text is None:
@@ -242,5 +226,26 @@ def fetchNews(country_code, city_code, cityAndState):
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
         cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)
-
     return news
+
+def fetchState(country_code, city_code, cityAndState):
+    state = cache.get('state_{}_{}'.format(country_code, city_code))
+    if state is None:
+        state = getState(str(Country(country_code).name), cityAndState)
+        cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
+    return state
+
+
+def fetchTimezone(country_code, city_code, current_weather):
+    local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
+    if local_timezone is None:
+        local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
+        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_FIVE)
+    return local_timezone
+
+    #
+    # current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
+    # if current_time is None:
+    #     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
+    #     cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
+
