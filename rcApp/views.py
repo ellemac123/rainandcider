@@ -200,8 +200,7 @@ def fetchState(country_code, city_code, cityAndState, citydata):
         #cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
 
         Obj = City.objects.get(id=city_code)
-        cache.set(Obj.cache_key('state'))
-
+        cache.set(Obj, Obj.cache_key('state'))
 
     return state
 
