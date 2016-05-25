@@ -52,7 +52,7 @@ def detail(request, country_code, city_code):
 
     cityAndState = current_weather['location']['name']
     news = fetchNews(country_code, city_code, cityAndState)
-    state = fetchState(country_code, city_code, cityAndState)
+    state = fetchState(country_code, city_code, cityAndState, cityData)
     text = fetchTwitter(country_code, city_code, current_weather)
     currentText = currentWeatherErrorCheck(current_weather)
 
@@ -193,11 +193,16 @@ def fetchNews(country_code, city_code, cityAndState):
     return news
 
 
-def fetchState(country_code, city_code, cityAndState):
+def fetchState(country_code, city_code, cityAndState, citydata):
     state = cache.get('state_{}_{}'.format(country_code, city_code))
     if state is None:
         state = getState(str(Country(country_code).name), cityAndState)
-        cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
+        #cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
+
+        Obj = City.objects.get(id=city_code)
+        cache.set(Obj.cache_key('state'))
+
+
     return state
 
 
