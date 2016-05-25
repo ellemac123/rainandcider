@@ -84,9 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-
 if ON_OPENSHIFT:
 
     LOG_DIR = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''))
@@ -115,7 +112,8 @@ CACHE_PORT = '11211'
 #     }
 
 
-
+# Database
+# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 if 'OPENSHIFT_REPO_DIR' in os.environ:
     DATABASES = {
         'default': {
