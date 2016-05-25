@@ -119,6 +119,7 @@ def getState(countryName, cityState):
     return ' ' + state
 
 
+
 def getNews(cityState, countryName):
     name = str(countryName)
     if name == 'United States of America':
