@@ -14,7 +14,7 @@ class City(models.Model):
     location_id = models.CharField(max_length=8);
 
     def cache_key(self, type):
-        return "{}_{}_{}".format(type, self.country.id, self.id)
+        return "{}_{}_{}".format(type, self.country, self.id)
 
     def __str__(self):
         return self.city
