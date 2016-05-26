@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-
+from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'twython_django_oauth',
     'rcApp',
+    'djcelery',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -93,6 +94,49 @@ else:
 
 
 CACHE_PORT = '11211'
+
+if ON_OPENSHIFT:
+    CELERYBEAT_SCHEDULE_FILENAME = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
+                                                'celerybeat_schedule')
+    CELERYBEAT_SCHEDULE_PIDFILE = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
+                                           'celerybeat.pid')
+    REDIS_URL = "redis://:{}@{}:{}/1".format(os.environ.get('REDIS_PASSWORD', ''),
+                                             os.environ.get('OPENSHIFT_REDIS_HOST', ''),
+                                             os.environ.get('OPENSHIFT_REDIS_PORT', ''))
+else:
+    LOG_DIR = '.'
+    CELERYBEAT_SCHEDULE_FILENAME = 'celerybeat_schedule'
+    CELERYBEAT_SCHEDULE_PIDFILE = 'celerybeat.pid'
+    REDIS_URL = "redis://127.0.0.1:6379/1"
+
+
+BROKER_URL = REDIS_URL
+CELERY_IMPORTS = ('rcApp.tasks')
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_DEFAULT_QUEUE = 'rcApp'
+CELERY_RESULT_EXCHANGE = 'countryresults'
+
+
+CELERYBEAT_SCHEDULE = {
+    'cache_data': {
+        'task': 'update_cache',
+        'schedule': timedelta(seconds=10),
+    'options': {'expire': 30},
+    },
+}
+
+
+CACHES= {
+    "BACKEND": "django_redis.cache.RedisCache",
+    "LOCATION": REDIS_URL,
+    "OPTIONS": {
+        "CLIENT_CLASS": "django_redis.client.DefaultClient",
+    }
+}
+
 # #Production Environment
 # if ON_OPENSHIFT:
 #     CACHES = {

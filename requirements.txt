@@ -4,8 +4,10 @@ twython
 twython-django==1.5.2
 django-bootstrap3
 django-redis
+django-celery
 pytz
 us
 timezonefinder
 pywapi
 python-memcached
+redis

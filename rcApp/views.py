@@ -237,7 +237,7 @@ def fetchCurrentIcon(country_code, city_code, current_weather):
 def fetchIcons(country_code, city_code, current_weather):
     cityObject = City.objects.get(id=city_code)
     icons = cache.get(cityObject.cache_key('icons'))
-    #icons = cache.get('icon_{}_{}'.format(country_code, city_code))
+    # icons = cache.get('icon_{}_{}'.format(country_code, city_code))
     if icons is None:
         day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
         day2_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][2]['day']['icon'])
@@ -245,31 +245,47 @@ def fetchIcons(country_code, city_code, current_weather):
         icons = [day1_icon, day2_icon, day3_icon]
         cache.set(cityObject.cache_key('icons'), icons, CACHE_TIME_FIVE)
 
-        #cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
+        # cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
     return icons
 
 
 def fetchCurrentWeather(country_code, city_code, cityData):
     cityObject = City.objects.get(id=city_code)
     current_weather = cache.get(cityObject.cache_key('current_weather'))
-    #current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
+    # current_weather = cache.get('weather_{}_{}'.format(country_code, city_code))
     if current_weather is None:
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
         cache.set(cityObject.cache_key('current_weather'), current_weather, CACHE_TIME_FIVE)
-        #cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
+        # cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
     return current_weather
 
 
 def fetchTwitter(country_code, city_code, current_weather):
     cityObject = City.objects.get(id=city_code)
     text = cache.get(cityObject.cache_key('twitter'))
-    #text = cache.get('twitter_{}_{}'.format(country_code, city_code))
+    # text = cache.get('twitter_{}_{}'.format(country_code, city_code))
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
         cache.set(cityObject.cache_key('twitter'), text, CACHE_TIME_FIVE)
-        #cache.set('twitter_{}_{}'.format(country_code, city_code), text, CACHE_TIME_FIVE)
+        # cache.set('twitter_{}_{}'.format(country_code, city_code), text, CACHE_TIME_FIVE)
     return text
 
+
+def update_city(country_code, city_code):
+    cityData = City.objects.get(id=city_code)
+
+    current_weather = fetchCurrentWeather(country_code, city_code, cityData)
+    fetchCurrentIcon(country_code, city_code, current_weather)
+    fetchIcons(country_code, city_code, current_weather)
+    local_timezone = fetchTimezone(country_code, city_code, current_weather)
+    datetime.datetime.now(pytz.timezone(local_timezone))
+
+    cityAndState = current_weather['location']['name']
+    fetchNews(country_code, city_code, cityAndState)
+    fetchState(country_code, city_code, cityAndState)
+    fetchTwitter(country_code, city_code, current_weather)
+    currentWeatherErrorCheck(current_weather)
+    print("inside update city method")
 
     #
     # current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
