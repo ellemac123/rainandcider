@@ -96,6 +96,8 @@ else:
 
 CACHE_PORT = '11211'
 
+
+
 if ON_OPENSHIFT:
     CELERYBEAT_SCHEDULE_FILENAME = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
                                                 'celerybeat_schedule')
