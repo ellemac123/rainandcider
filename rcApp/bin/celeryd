@@ -7,7 +7,7 @@
 
 VERSION=10.1
 echo "celery init v${VERSION}."
-
+echo "openshift python directory  ${OPENSHIFT_PYTHON_DIR}"
 
 SCRIPT_NAME="celeryd"
 

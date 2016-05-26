@@ -1,7 +1,6 @@
 from __future__ import absolute_import
 from celery import Celery
 from .views import *
-
 app = Celery('tasks')
 
 #app = Celery('tasks', broker='redis://localhost:6379/0', backend='redis://localhost')
