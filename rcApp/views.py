@@ -244,8 +244,6 @@ def fetchIcons(country_code, city_code, current_weather):
         day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][3]['day']['icon'])
         icons = [day1_icon, day2_icon, day3_icon]
         cache.set(cityObject.cache_key('icons'), icons, CACHE_TIME_FIVE)
-        print('set the icons cache with : ' + str(cache.get(cityObject.cache_key('icons'))))
-
         #cache.set('icon_{}_{}'.format(country_code, city_code), icons, CACHE_TIME_FIVE)
     return icons
 
@@ -257,7 +255,6 @@ def fetchCurrentWeather(country_code, city_code, cityData):
     if current_weather is None:
         current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
         cache.set(cityObject.cache_key('current_weather'), current_weather, CACHE_TIME_FIVE)
-        print('set the weather cache : ' + str(cache.get(cityObject.cache_key('current_weather'))))
         #cache.set('weather_{}_{}'.format(country_code, city_code), current_weather, CACHE_TIME_FIVE)
     return current_weather
 
@@ -269,7 +266,6 @@ def fetchTwitter(country_code, city_code, current_weather):
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
         cache.set(cityObject.cache_key('twitter'), text, CACHE_TIME_FIVE)
-        print('set the cache with : ' + str(cache.get(cityObject.cache_key('twitter'))))
         #cache.set('twitter_{}_{}'.format(country_code, city_code), text, CACHE_TIME_FIVE)
     return text
 
