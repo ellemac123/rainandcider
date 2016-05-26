@@ -261,11 +261,12 @@ def fetchCurrentWeather(country_code, city_code, cityData):
 
 def fetchTwitter(country_code, city_code, current_weather):
     cityObject = City.objects.get(id=city_code)
-
-    text = cache.get('twitter_{}_{}'.format(country_code, city_code))
+    text = cache.get(cityObject.cache_key('twitter'))
+    #text = cache.get('twitter_{}_{}'.format(country_code, city_code))
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('twitter_{}_{}'.format(country_code, city_code), text, CACHE_TIME_FIVE)
+        cache.set(cityObject.cache_key('twitter'), text, CACHE_TIME_FIVE)
+        #cache.set('twitter_{}_{}'.format(country_code, city_code), text, CACHE_TIME_FIVE)
     return text
 
 
