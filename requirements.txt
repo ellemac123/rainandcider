@@ -11,3 +11,4 @@ timezonefinder
 pywapi
 python-memcached
 redis
+celery
