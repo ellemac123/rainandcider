@@ -213,7 +213,7 @@ def fetchTimezone(country_code, city_code, current_weather):
     #local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
     if local_timezone is None:
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set(cache.set(cityObject.cache_key('timezone')), local_timezone, CACHE_TIME_DAY)
+        cache.set(cityObject.cache_key('timezone'), local_timezone, CACHE_TIME_DAY)
 
         # cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
     return local_timezone
