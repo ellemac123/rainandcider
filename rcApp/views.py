@@ -203,7 +203,7 @@ def fetchState(country_code, city_code, cityAndState):
         state = getState(str(Country(country_code).name), cityAndState)
         # cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
         cache.set(cityObject.cache_key('state'), state, CACHE_TIME_DAY)
-        print(cityObject.cache_key('state'))
+        print(str(cityObject.cache_key('state')))
     return state
 
 
