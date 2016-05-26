@@ -101,9 +101,9 @@ if ON_OPENSHIFT:
                                                 'celerybeat_schedule')
     CELERYBEAT_SCHEDULE_PIDFILE = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
                                            'celerybeat.pid')
-    REDIS_URL = "redis://:{}@{}:{}/1".format(os.environ.get('REDIS_PASSWORD', ''),
-                                             os.environ.get('OPENSHIFT_REDIS_HOST', ''),
-                                             os.environ.get('OPENSHIFT_REDIS_PORT', ''))
+    REDIS_URL = "redis://:{}@{}:{}/1".format(os.environ.get('OPENSHIFT_REDIS_DB_PASSWORD', ''),
+                                             os.environ.get('OPENSHIFT_REDIS_DB_HOST', ''),
+                                             os.environ.get('OPENSHIFT_REDIS_DB_PORT', ''))
 else:
     LOG_DIR = '.'
     CELERYBEAT_SCHEDULE_FILENAME = 'celerybeat_schedule'
