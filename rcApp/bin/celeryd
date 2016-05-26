@@ -13,7 +13,7 @@ SCRIPT_NAME="celeryd"
 
 DEFAULT_PID_FILE="${OPENSHIFT_TMP_DIR}celery/%n.pid"
 DEFAULT_LOG_FILE="${OPENSHIFT_LOG_DIR}celery/%n.log"
-DEFAULT_CELERY_BIN="${OPENSHIFT_PYTHON_DIR}virtenv/venv/bin/celery"
+DEFAULT_CELERY_BIN="${OPENSHIFT_PYTHON_DIR}virtenv/bin/celery"
 DEFAULT_LOG_LEVEL="INFO"
 DEFAULT_NODES="celery"
 DEFAULT_CELERYD="-m celery worker --detach"
