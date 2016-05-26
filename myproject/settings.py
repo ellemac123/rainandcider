@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'bootstrap3',
     'twython_django_oauth',
     'rcApp',
-    'celery',
     'djcelery',
 ]
 
