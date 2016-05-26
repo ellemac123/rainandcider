@@ -10,7 +10,7 @@ app = Celery('tasks')
 def update_cache():
     """
     This will update the cache so that the user
-    'never' has to wait for content to load
+    'never' has to wait for content to load 
     """
     print("Called the cache")
     for city in City.objects.all():
