@@ -202,7 +202,7 @@ def fetchState(country_code, city_code, cityAndState):
     if state is None:
         state = getState(str(Country(country_code).name), cityAndState)
         # cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
-        cache.set(cityObject.cache_key('state'), state)
+        cache.set(cityObject.cache_key('state'), state, CACHE_TIME_DAY)
         print(cityObject.cache_key('state'))
     return state
 
@@ -266,6 +266,7 @@ def fetchTwitter(country_code, city_code, current_weather):
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
         cache.set(cityObject.cache_key('twitter'), text, CACHE_TIME_FIVE)
+        print('set the cache with : ' + cache.get(cityObject.cache_key('twitter')))
         #cache.set('twitter_{}_{}'.format(country_code, city_code), text, CACHE_TIME_FIVE)
     return text
 
