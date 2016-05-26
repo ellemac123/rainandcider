@@ -52,7 +52,7 @@ def detail(request, country_code, city_code):
 
     cityAndState = current_weather['location']['name']
     news = fetchNews(country_code, city_code, cityAndState)
-    state = fetchState(country_code, city_code, cityAndState, cityData)
+    state = fetchState(country_code, city_code, cityAndState)
     text = fetchTwitter(country_code, city_code, current_weather)
     currentText = currentWeatherErrorCheck(current_weather)
 
@@ -115,7 +115,6 @@ def getState(countryName, cityState):
         state = us.states.lookup(stateCode)
         state = state.name + ', '
     return ' ' + state
-
 
 
 def getNews(cityState, countryName):
@@ -186,30 +185,37 @@ def tryTwitter(lat, long):
 
 
 def fetchNews(country_code, city_code, cityAndState):
-    news = cache.get('news_{}_{}'.format(country_code, city_code))
+    # news = cache.get('news_{}_{}'.format(country_code, city_code))
+    cityObject = City.objects.get(id=city_code)
+    news = cache.get(cityObject.cache_key('news'))
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
-        cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)
+        cache.set(cityObject.cache_key('news'), news, CACHE_TIME_DAY)
+        # cache.set('news_{}_{}'.format(country_code, city_code), news, CACHE_TIME_DAY)
     return news
 
 
-def fetchState(country_code, city_code, cityAndState, citydata):
-    state = cache.get('state_{}_{}'.format(country_code, city_code))
+def fetchState(country_code, city_code, cityAndState):
+    # state = cache.get('state_{}_{}'.format(country_code, city_code))
+    cityObject = City.objects.get(id=city_code)
+    state = cache.get(cityObject.cache_key('state'))
     if state is None:
         state = getState(str(Country(country_code).name), cityAndState)
-        #cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
-
-        Obj = City.objects.get(id=city_code)
-        cache.set(Obj, Obj.cache_key('state'))
-
+        # cache.set('state_{}_{}'.format(country_code, city_code), state, CACHE_TIME_DAY)
+        cache.set(cityObject.cache_key('state'), state)
+        print(cityObject.cache_key('state'))
     return state
 
 
 def fetchTimezone(country_code, city_code, current_weather):
-    local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
+    cityObject = City.objects.get(id=city_code)
+    local_timezone = cache.get(cityObject.cache_key('timezone'))
+    #local_timezone = cache.get('timezone_{}_{}'.format(country_code, city_code))
     if local_timezone is None:
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
+        cache.set(cache.set(cityObject.cache_key('timezone')), local_timezone, CACHE_TIME_DAY)
+
+        # cache.set('timezone_{}_{}'.format(country_code, city_code), local_timezone, CACHE_TIME_DAY)
     return local_timezone
 
 
