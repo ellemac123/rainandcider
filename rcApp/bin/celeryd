@@ -11,6 +11,7 @@ echo "openshift python directory  ${OPENSHIFT_PYTHON_DIR}"
 
 SCRIPT_NAME="celeryd"
 
+echo "the PID file : ${OPENSHIFT_TMP_DIR}celery/%n.pid"
 DEFAULT_PID_FILE="${OPENSHIFT_TMP_DIR}celery/%n.pid"
 DEFAULT_LOG_FILE="${OPENSHIFT_LOG_DIR}celery/%n.log"
 DEFAULT_CELERY_BIN="${OPENSHIFT_PYTHON_DIR}virtenv/bin/celery"
