@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+from urllib.parse import urlparse
 from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -126,7 +127,7 @@ CELERYBEAT_SCHEDULE = {
     'cache_data': {
         'task': 'update_cache',
         'schedule': timedelta(seconds=10),
-    'options': {'expire': 30},
+        'options': {'expire': 30},
     },
 }
 
@@ -162,11 +163,16 @@ CELERYBEAT_SCHEDULE = {
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
-if 'OPENSHIFT_REPO_DIR' in os.environ:
+if 'OPENSHIFT_POSTGRESQL_DB_URL' in os.environ:
+    url = urlparse(os.environ.get('OPENSHIFT_POSTGRESQL_DB_URL'))
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ['OPENSHIFT_APP_NAME'],
+            'USER': url.username,
+            'PASSWORD': url.password,
+            'HOST': url.hostname,
+            'PORT': url.port,
         }
     }
 else:
