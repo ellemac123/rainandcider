@@ -2,7 +2,7 @@ from __future__ import absolute_import
 import os
 from celery import Celery
 from .views import *
-BROKER_URL = "redis://:{}@{}:{}/1".format(os.environ.get('OPENSHIFT_REDIS_PASSWORD', ''),
+BROKER_URL = "redis://:{}@{}:{}".format(os.environ.get('OPENSHIFT_REDIS_PASSWORD', ''),
                                           os.environ.get('OPENSHIFT_REDIS_HOST', ''),
                                           os.environ.get('OPENSHIFT_REDIS_PORT', ''))
 
