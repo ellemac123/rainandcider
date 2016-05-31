@@ -15,7 +15,7 @@ SCRIPT_NAME="celeryd"
 
 
 DEFAULT_PID_FILE="${OPENSHIFT_TMP_DIR}celery/%n.pid"
-
+echo "the TMP DIRECTORY : ${OPENSHIFT_TMP_DIRECTORY}"
 echo "the PID file : $DEFAULT_PID_FILE"
 
 DEFAULT_LOG_FILE="${OPENSHIFT_LOG_DIR}celery/%n.log"
