@@ -21,5 +21,9 @@ python "$OPENSHIFT_REPO_DIR"manage.py migrate --noinput
 echo "Executing 'python $OPENSHIFT_REPO_DIR/myapp/manage.py collectstatic --noinput'"
 python "$OPENSHIFT_REPO_DIR"manage.py collectstatic --noinput
 
-echo "Celery Worker restart"
-${OPENSHIFT_REPO_DIR}/rcApp/bin/celeryd restart
+#echo "Celery Worker restart"
+#${OPENSHIFT_REPO_DIR}/rcApp/bin/celeryd restart
+
+
+echo "Manage.py start"
+"$OPENSHIFT_REPO_DIR"manage.py celery worker -A myapp --beat
