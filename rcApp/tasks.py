@@ -2,12 +2,12 @@ from __future__ import absolute_import
 import os
 from celery import Celery
 from .views import *
-BROKER_URL = "redis://:{}@{}:{}".format(os.environ.get('OPENSHIFT_REDIS_DB_PASSWORD', ''),
-                                          os.environ.get('OPENSHIFT_REDIS_DB_HOST', ''),
-                                          os.environ.get('OPENSHIFT_REDIS_DB_PORT', ''))
+BROKER_URL = "redis://:{}@{}:{}".format(os.environ.get('OPENSHIFT_REDIS_PASSWORD', ''),
+                                          os.environ.get('OPENSHIFT_REDIS_HOST', ''),
+                                          os.environ.get('OPENSHIFT_REDIS_PORT', ''))
 
-app = Celery('tasks', broker=BROKER_URL, backend=BROKER_URL)
-#app = Celery('tasks')
+#app = Celery('tasks', broker=BROKER_URL, backend=BROKER_URL)
+app = Celery('tasks')
 #app = Celery('tasks', broker='redis://localhost:6379/0', backend='redis://localhost')
 
 @app.task(run_every=10, name="update_cache")
