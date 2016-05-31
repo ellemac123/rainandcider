@@ -6,8 +6,8 @@ BROKER_URL = "redis://:{}@{}:{}".format(os.environ.get('OPENSHIFT_REDIS_DB_PASSW
                                           os.environ.get('OPENSHIFT_REDIS_DB_HOST', ''),
                                           os.environ.get('OPENSHIFT_REDIS_DB_PORT', ''))
 
-#app = Celery('tasks', broker=BROKER_URL, backend=BROKER_URL)
-app = Celery('tasks')
+app = Celery('tasks', broker=BROKER_URL, backend=BROKER_URL)
+#app = Celery('tasks')
 #app = Celery('tasks', broker='redis://localhost:6379/0', backend='redis://localhost')
 
 @app.task(run_every=10, name="update_cache")
