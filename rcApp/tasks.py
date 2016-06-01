@@ -2,9 +2,11 @@ from __future__ import absolute_import
 import os
 from celery import Celery
 from .views import *
-BROKER_URL = "redis://:{}@{}:{}".format(os.environ.get('OPENSHIFT_REDIS_PASSWORD', ''),
-                                          os.environ.get('OPENSHIFT_REDIS_HOST', ''),
-                                          os.environ.get('OPENSHIFT_REDIS_PORT', ''))
+#BROKER_URL = "redis://:{}@{}:{}".format(os.environ.get('OPENSHIFT_REDIS_PASSWORD', ''),
+ #                                         os.environ.get('OPENSHIFT_REDIS_HOST', ''),
+  #                                        os.environ.get('OPENSHIFT_REDIS_PORT', ''))
+
+REDIS_URL = "redis://127.0.0.1:6379"
 
 #app = Celery('tasks', broker=BROKER_URL, backend=BROKER_URL)
 app = Celery('tasks')
