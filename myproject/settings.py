@@ -96,7 +96,7 @@ else:
 CACHE_PORT = '11211'
 
 
-
+from kombu import Exchange, Queue
 if ON_OPENSHIFT:
     CELERYBEAT_SCHEDULE_FILENAME = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
                                                 'celerybeat_schedule')
@@ -120,13 +120,14 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_RESULT_BACKEND = REDIS_URL
 CELERY_DEFAULT_QUEUE = 'rcApp'
-CELERY_RESULT_EXCHANGE = 'countryresults'
-
-
+CELERY_RESULT_EXCHANGE = 'rcAppresults'
+CELERY_QUEUES = (
+    Queue('rcApp', Exchange('rcApp'), routing_key='rcApp'),
+)
 CELERYBEAT_SCHEDULE = {
     'cache_data': {
         'task': 'update_cache',
-        'schedule': timedelta(seconds=10),
+        'schedule': timedelta(seconds=30),
         'options': {'expire': 30},
     },
 }
