@@ -205,59 +205,21 @@ LOG_LEVEL = 'DEBUG' if DEBUG else 'INFO'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'debug': {
-            'format': '[%(levelname)s] [%(asctime)s] %(pathname)s:%(lineno)d - %(message)s',
-            'datefmt': '%b %d %H:%M:%S',
-        },
-        'verbose': {
-            'format': '[%(levelname)s] [%(asctime)s] %(filename)s:%(lineno)d - %(message)s',
-            'datefmt': '%b %d %H:%M:%S',
-        },
-        'simple': {
-            'format': '[%(levelname)s] [%(asctime)s]: %(message)s'
-        },
-    },
-    'filters': {
-        'require_debug_false': {
-            '()': 'django.utils.log.RequireDebugFalse',
-        },
-    },
-    'handlers': {
-        'null': {
+    'handlers':{
+        'file': {
             'level': 'DEBUG',
-            'class': 'django.utils.log.NullHandler',
-        },
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple',
-            'stream': sys.stdout,
-        },
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler',
-            'filters': ['require_debug_false'],
-            'include_html': True,
+            'class': 'logging.FileHandler',
+            'filename': 'rcApp/myapp/debug.log'
         },
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
-        'myapp': {
-            'handlers': ['rcApp', 'mail_admins'],
-            'level': LOG_LEVEL,
-            #'propagate': False,
-        },
-    }
+      'django': {
+          'handlers': ['file'],
+          'level': 'DEBUG',
+          'propagate': True,
+      },
+    },
 }
-
-if LOG_LEVEL == 'DEBUG':
-    LOGGING['handlers']['console']['formatter'] = "verbose"
-    LOGGING['loggers']['myapp']['handlers'].append('console')
 
 
 # Static files (CSS, JavaScript, Images)
