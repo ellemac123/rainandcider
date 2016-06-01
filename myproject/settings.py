@@ -145,24 +145,6 @@ CACHES = {
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
 
-# #Production Environment
-# if ON_OPENSHIFT:
-#     CACHES = {
-#         'default': {
-#             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#             'LOCATION': '%s:%s' % (os.environ['OPENSHIFT_PYTHON_IP'], CACHE_PORT),
-#         }
-#     }
-#
-# # Development Environment
-# else:
-#     CACHES = {
-#         'default': {
-#             'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-#             'LOCATION': '127.0.0.1:%s' % CACHE_PORT,
-#         }
-#     }
-
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
