@@ -90,19 +90,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-if ON_OPENSHIFT:
-
-    LOG_DIR = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''))
-
-else:
-    LOG_DIR = '.'
-
-
-CACHE_PORT = '11211'
-
 
 from kombu import Exchange, Queue
 if ON_OPENSHIFT:
+    LOG_DIR = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''))
     CELERYBEAT_SCHEDULE_FILENAME = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
                                                 'celerybeat_schedule')
     CELERYBEAT_SCHEDULE_PIDFILE = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
@@ -136,6 +127,10 @@ CELERYBEAT_SCHEDULE = {
         'options': {'expire': 30},
     },
 }
+
+# Causes django to use Redis for session information
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+SESSION_CACHE_ALIAS = "default"
 
 
 # CACHES = {

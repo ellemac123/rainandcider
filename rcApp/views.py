@@ -271,9 +271,3 @@ def update_city(country_code, city_code):
     fetchTwitter(country_code, city_code, current_weather)
     currentWeatherErrorCheck(current_weather)
     print("inside update city method")
-
-    #
-    # current_time = cache.get('currentTime_{}_{}'.format(country_code, city_code))
-    # if current_time is None:
-    #     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
-    #     cache.set('currentTime_{}_{}'.format(country_code, city_code), current_time, CACHE_TIME_FIVE)
