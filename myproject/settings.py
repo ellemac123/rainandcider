@@ -229,6 +229,7 @@ LOGGING = {
             'class': 'django.utils.log.NullHandler',
         },
         'console': {
+            'level': 'INFO',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
             'stream': sys.stdout,
@@ -239,7 +240,7 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'include_html': True,
         },
-        'rcApp': {
+        'myapp': {
             'class': 'logging.handlers.RotatingFileHandler',
             'formatter': 'simple',
             'filename': os.path.join(LOG_DIR, 'rcApp.log'),
@@ -253,7 +254,7 @@ LOGGING = {
             'level': 'ERROR',
             'propagate': True,
         },
-        'rcApp': {
+        'myapp': {
             'handlers': ['rcApp', 'mail_admins'],
             'level': LOG_LEVEL,
             #'propagate': False,
@@ -264,7 +265,7 @@ LOGGING = {
 if LOG_LEVEL == 'DEBUG':
     LOGGING['handlers']['console']['formatter'] = "verbose"
     LOGGING['handlers']['rcApp']['formatter'] = "debug"
-    LOGGING['loggers']['rcApp']['handlers'].append('console')
+    LOGGING['loggers']['myapp']['handlers'].append('console')
 
 
 # Static files (CSS, JavaScript, Images)
