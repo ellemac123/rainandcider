@@ -209,7 +209,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'rcApp/myapp/debug.log'
+            'filename': 'app-root/logs/debug.log'
         },
     },
     'loggers': {
@@ -220,7 +220,6 @@ LOGGING = {
       },
     },
 }
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
