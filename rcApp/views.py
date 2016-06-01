@@ -5,6 +5,7 @@ import pytz
 import pywapi
 import urllib2
 import us
+import logging
 from django.contrib import messages
 from django.core.cache import cache
 from django.http import Http404
@@ -17,15 +18,18 @@ from twython import Twython
 from .forms import CityForm
 from .models import *
 
+
+
 twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 CACHE_TIME_DAY = 86400
 CACHE_TIME_FIVE = 60 * 5
-
+logger = logging.getLogger('rcApp.myapp')
 
 @cache_page(60 * 40)
 def home(request):
+    logger.debug('The home page was called. ')
     cityform = CityForm()
     if request.method == 'POST':
         cityform = CityForm(request.POST)
@@ -40,7 +44,9 @@ def home(request):
 
 
 def detail(request, country_code, city_code):
+
     if country_code not in countries:
+        logger.error('Invalid Country Code Error')
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
