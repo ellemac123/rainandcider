@@ -25,7 +25,7 @@ TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 CACHE_TIME_DAY = 86400
 CACHE_TIME_FIVE = 60 * 5
-logger = logging.getLogger('rcApp.myapp')
+logger = logging.getLogger(__name__)
 
 @cache_page(60 * 40)
 def home(request):
