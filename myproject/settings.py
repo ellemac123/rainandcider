@@ -240,13 +240,6 @@ LOGGING = {
             'filters': ['require_debug_false'],
             'include_html': True,
         },
-        'myapp': {
-            'class': 'logging.handlers.RotatingFileHandler',
-            'formatter': 'simple',
-            'filename': os.path.join(LOG_DIR, 'rcApp.log'),
-            'maxBytes': 1024 * 1024 * 5,  # 5 MB
-            'backupCount': 10
-        },
     },
     'loggers': {
         'django.request': {
