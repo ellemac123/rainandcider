@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
-import os
+import os, sys
 from datetime import timedelta
 import djcelery
 djcelery.setup_loader()
@@ -197,10 +197,74 @@ USE_L10N = True
 
 USE_TZ = True
 
-
-
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
+
+
+LOG_LEVEL = 'DEBUG' if DEBUG else 'INFO'
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'debug': {
+            'format': '[%(levelname)s] [%(asctime)s] %(pathname)s:%(lineno)d - %(message)s',
+            'datefmt': '%b %d %H:%M:%S',
+        },
+        'verbose': {
+            'format': '[%(levelname)s] [%(asctime)s] %(filename)s:%(lineno)d - %(message)s',
+            'datefmt': '%b %d %H:%M:%S',
+        },
+        'simple': {
+            'format': '[%(levelname)s] [%(asctime)s]: %(message)s'
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'null': {
+            'level': 'DEBUG',
+            'class': 'django.utils.log.NullHandler',
+        },
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+            'stream': sys.stdout,
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'filters': ['require_debug_false'],
+            'include_html': True,
+        },
+        'rcApp': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'formatter': 'simple',
+            'filename': os.path.join(LOG_DIR, 'rcApp.log'),
+            'maxBytes': 1024 * 1024 * 5,  # 5 MB
+            'backupCount': 10
+        },
+    },
+    'loggers': {
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'rcApp': {
+            'handlers': ['rcApp', 'mail_admins'],
+            'level': LOG_LEVEL,
+            #'propagate': False,
+        },
+    }
+}
+
+if LOG_LEVEL == 'DEBUG':
+    LOGGING['handlers']['console']['formatter'] = "verbose"
+    LOGGING['handlers']['rcApp']['formatter'] = "debug"
+    LOGGING['loggers']['rcApp']['handlers'].append('console')
 
 
 # Static files (CSS, JavaScript, Images)
