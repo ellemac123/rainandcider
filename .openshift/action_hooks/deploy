@@ -25,6 +25,5 @@ python "$OPENSHIFT_REPO_DIR"manage.py collectstatic --noinput
 #${OPENSHIFT_REPO_DIR}/rcApp/bin/celeryd restart
 
 
-
 echo "Manage.py start"
 "$OPENSHIFT_REPO_DIR"manage.py celery worker -A myproject --beat
