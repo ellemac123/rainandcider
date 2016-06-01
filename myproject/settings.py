@@ -264,7 +264,7 @@ LOGGING = {
 
 if LOG_LEVEL == 'DEBUG':
     LOGGING['handlers']['console']['formatter'] = "verbose"
-    LOGGING['handlers']['rcApp']['formatter'] = "debug"
+    LOGGING['handlers']['myapp']['formatter'] = "debug"
     LOGGING['loggers']['myapp']['handlers'].append('console')
 
 
