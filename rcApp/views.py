@@ -1,12 +1,11 @@
 import datetime
 import json
+import logging
 
 import pytz
 import pywapi
 import urllib2
 import us
-import logging
-from django.contrib import messages
 from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -18,14 +17,13 @@ from twython import Twython
 from .forms import CityForm
 from .models import *
 
-
-
 twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 CACHE_TIME_DAY = 86400
 CACHE_TIME_FIVE = 60 * 5
 logger = logging.getLogger(__name__)
+
 
 @cache_page(60 * 40)
 def home(request):
@@ -36,15 +34,13 @@ def home(request):
         if cityform.is_valid():
             citydata = cityform.cleaned_data
             cityInfo = City.objects.get(id=citydata['city'])
-
-            messages.success(request, 'Successfully Changed')
+            logger.info('request successfully changed')
             return redirect('detail', country_code=cityInfo.country, city_code=citydata['city'])
     else:
         return render(request, 'home/home.html', {'cityform': cityform})
 
 
 def detail(request, country_code, city_code):
-
     if country_code not in countries:
         logger.error('Invalid Country Code Error')
         raise Http404("Invalid Country Code")
@@ -62,6 +58,7 @@ def detail(request, country_code, city_code):
     text = fetchTwitter(country_code, city_code, current_weather)
     currentText = currentWeatherErrorCheck(current_weather)
 
+    logger.info('data is stored to be passed to detail.html')
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
             'current_conditions': currentText,
             'current_temperature': current_weather['current_conditions']['temperature'],
@@ -104,13 +101,14 @@ def detail(request, country_code, city_code):
 
 def currentWeatherErrorCheck(current_weather):
     if current_weather['current_conditions']['text'] == '':
+        logger.debug('current weather is unavailable - trying to get weather from brief text')
         currentText = current_weather['forecasts'][0]['day']['brief_text']
         if currentText == '':
             currentText = 'information is currently unavailable'
     else:
-        currentText = current_weather['current_conditions']['text'] + ' and'
+        currentText = current_weather['current_conditions']['text']
 
-    return currentText
+    return currentText + ' and'
 
 
 def getState(countryName, cityState):
@@ -140,7 +138,6 @@ def getNews(cityState, countryName):
         content = f.read()
         decoded_response = content.decode('utf-8')
         jsonResponse = json.loads(decoded_response)
-
         length = len(jsonResponse["results"][0]["article_list"]["results"])
 
         if length > 0:
@@ -148,11 +145,10 @@ def getNews(cityState, countryName):
                 list.append(jsonResponse["results"][0]["article_list"]["results"][x]["title"])
         else:
             list = ['No Current News to Report']
-
-        return list
     except:
         list = ['No News to Report']
-        return list
+
+    return list
 
 
 def findTimezone(lat, long):
