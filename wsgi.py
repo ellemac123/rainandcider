@@ -9,3 +9,5 @@ except IOError:
 
 
 from myproject.wsgi import application
+
+os.environ["CELERY_LOADER"] = "django"
