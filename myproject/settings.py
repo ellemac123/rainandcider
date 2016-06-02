@@ -102,6 +102,7 @@ if ON_OPENSHIFT:
     REDIS_URL = "redis://:{}@{}:{}".format(os.environ.get('OPENSHIFT_REDIS_PASSWORD', ''),
                                             os.environ.get('OPENSHIFT_REDIS_HOST', ''),
                                              os.environ.get('OPENSHIFT_REDIS_PORT', ''))
+
 else:
     LOG_DIR = '.'
     CELERYBEAT_SCHEDULE_FILENAME = 'celerybeat_schedule'
