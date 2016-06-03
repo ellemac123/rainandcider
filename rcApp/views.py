@@ -59,10 +59,16 @@ def home(request):
 
 
 """
-@:param request        l
+@:param request        The request to be rendered upon return.
 @:param country_code   The country code of the given city object.
                             Used to create the country name.
-@:param city_code      The city id. It is the id automatically
+@:param city_code      The city id. This is the id automattically
+                            created. Used to create a city object.
+
+The detail gets the data, checks if it has been cached, and if not
+it will cache the data. then it passes all that data to the
+detail.html file. The data is stored with a name, those names are
+used to access the data in detail.html
 """
 def detail(request, country_code, city_code):
 
