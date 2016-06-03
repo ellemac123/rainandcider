@@ -67,7 +67,7 @@ def detail(request, country_code, city_code):
     current_weather = fetchCurrentWeather(cityData)
     current_icon = fetchCurrentIcon(city_code, current_weather)
     icons = fetchIcons(city_code, current_weather)
-    local_timezone = fetchTimezone(city_code, current_weather)
+    local_timezone = fetchTimezone(cityData, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
     cityAndState = current_weather['location']['name']
@@ -226,8 +226,8 @@ def fetchState(country_code, city_code, cityAndState):
     return state
 
 
-def fetchTimezone(city_code, current_weather):
-    cityObject = City.objects.get(id=city_code)
+def fetchTimezone(cityObject, current_weather):
+   # cityObject = City.objects.get(id=city_code)
     local_timezone = cache.get(cityObject.cache_key('timezone'))
     if local_timezone is None:
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
@@ -295,7 +295,7 @@ def update_city(country_code, city_code):
     current_weather = fetchCurrentWeather(cityData)
     fetchCurrentIcon(city_code, current_weather)
     fetchIcons(city_code, current_weather)
-    local_timezone = fetchTimezone(city_code, current_weather)
+    local_timezone = fetchTimezone(cityData, current_weather)
     datetime.datetime.now(pytz.timezone(local_timezone))
 
     cityAndState = current_weather['location']['name']
