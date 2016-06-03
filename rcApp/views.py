@@ -208,7 +208,6 @@ def tryTwitter(lat, long):
 
 
 def fetchNews(country_code, cityObject, cityAndState):
-    #cityObject = City.objects.get(id=city_code)
     news = cache.get(cityObject.cache_key('news'))
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
@@ -217,7 +216,6 @@ def fetchNews(country_code, cityObject, cityAndState):
 
 
 def fetchState(country_code, cityObject, cityAndState):
-    #cityObject = City.objects.get(id=city_code)
     state = cache.get(cityObject.cache_key('state'))
     if state is None:
         state = getState(str(Country(country_code).name), cityAndState)
@@ -227,7 +225,6 @@ def fetchState(country_code, cityObject, cityAndState):
 
 
 def fetchTimezone(cityObject, current_weather):
-   # cityObject = City.objects.get(id=city_code)
     local_timezone = cache.get(cityObject.cache_key('timezone'))
     if local_timezone is None:
         local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
@@ -236,11 +233,10 @@ def fetchTimezone(cityObject, current_weather):
 
 
 def fetchCurrentIcon(cityObject, current_weather):
-   # cityObject = City.objects.get(id=city_code)
     current_icon = cache.get(cityObject.cache_key('current_icon'))
     if current_icon is None:
         icon_num = current_weather['current_conditions']['icon']
-        # error handling -- stupid queenstown never has current conditions, so just get their forecast for today
+        # if no current conditions, get day forecast
         if icon_num == '':
             icon_num = current_weather['forecasts'][0]['day']['icon']
         current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
@@ -249,7 +245,6 @@ def fetchCurrentIcon(cityObject, current_weather):
 
 
 def fetchIcons(cityObject, current_weather):
-    #cityObject = City.objects.get(id=city_code)
     icons = cache.get(cityObject.cache_key('icons'))
     if icons is None:
         day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
@@ -262,7 +257,6 @@ def fetchIcons(cityObject, current_weather):
 
 
 def fetchCurrentWeather(cityObject):
-   # cityObject = City.objects.get(id=city_code)
     current_weather = cache.get(cityObject.cache_key('current_weather'))
     if current_weather is None:
         current_weather = pywapi.get_weather_from_weather_com(cityObject.location_id)
@@ -271,7 +265,6 @@ def fetchCurrentWeather(cityObject):
 
 
 def fetchTwitter(cityObject, current_weather):
-    #cityObject = City.objects.get(id=city_code)
     text = cache.get(cityObject.cache_key('twitter'))
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])

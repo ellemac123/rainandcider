@@ -1,3 +1,9 @@
+"""
+@author Laura Macaluso
+@version 1.3, 06/3/2016
+
+Models.py creates 
+"""
 from django.db import models
 from django_countries import countries
 from django_countries.fields import CountryField
@@ -5,8 +11,6 @@ from django_countries.fields import CountryField
 
 def en_zed():
     return 'NZ'
-
-''' changed country field from choices=list(countries) '''
 
 
 class City(models.Model):
