@@ -270,8 +270,8 @@ def fetchCurrentWeather(city_code, cityData):
     return current_weather
 
 
-def fetchTwitter(city_code, current_weather):
-    cityObject = City.objects.get(id=city_code)
+def fetchTwitter(cityObject, current_weather):
+    #cityObject = City.objects.get(id=city_code)
     text = cache.get(cityObject.cache_key('twitter'))
     if text is None:
         text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
@@ -301,6 +301,6 @@ def update_city(country_code, city_code):
     cityAndState = current_weather['location']['name']
     fetchNews(country_code, city_code, cityAndState)
     fetchState(country_code, city_code, cityAndState)
-    fetchTwitter(city_code, current_weather)
+    fetchTwitter(cityData, current_weather)
     currentWeatherErrorCheck(current_weather)
     print("inside update city method")
