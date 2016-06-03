@@ -2,7 +2,9 @@
 @author Laura Macaluso
 @version 1.3, 06/3/2016
 
-Models.py creates 
+Models.py creates a city model that will
+hold each city created by the admin. Uses the
+django_countries package.
 """
 from django.db import models
 from django_countries import countries

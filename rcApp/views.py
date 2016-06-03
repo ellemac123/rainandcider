@@ -7,14 +7,15 @@ The detail function will access and cache the data passed to
 the detail.html file. This function calls other functions to make
 its work easier.
 
-The Twitter API is used to grab 3 local tweets from the city the
+The Twython Twitter API is used to grab 3 local tweets from the city the
 user selects. These tweets are selected using the city's
 latitude and longitude. The NYTimes API is used to access recent
 NYTimes articles based upon the country name. If the country is
 the United States of America, then it will grab the recent articles
 for the State. Pywapi is used to get the current weather from Weather.com
-based upon the city's location id (which is manually imported from the
-admin site).
+based upon the city's location id (which is manually inputted from the
+admin site by the user). Timezonefinder package is also used to fine the
+timezone and thus get the current time for the location.
 """
 import datetime
 import json
@@ -57,6 +58,12 @@ def home(request):
         return render(request, 'home/home.html', {'cityform': cityform})
 
 
+"""
+@:param request        l
+@:param country_code   The country code of the given city object.
+                            Used to create the country name.
+@:param city_code      The city id. It is the id automatically
+"""
 def detail(request, country_code, city_code):
 
     if country_code not in countries:
