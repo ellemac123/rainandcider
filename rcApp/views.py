@@ -71,7 +71,7 @@ def detail(request, country_code, city_code):
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
     cityAndState = current_weather['location']['name']
-    news = fetchNews(country_code, city_code, cityAndState)
+    news = fetchNews(country_code, cityData, cityAndState)
     state = fetchState(country_code, city_code, cityAndState)
     text = fetchTwitter(cityData, current_weather)
     currentText = currentWeatherErrorCheck(current_weather)
@@ -207,8 +207,8 @@ def tryTwitter(lat, long):
     return myList
 
 
-def fetchNews(country_code, city_code, cityAndState):
-    cityObject = City.objects.get(id=city_code)
+def fetchNews(country_code, cityObject, cityAndState):
+    #cityObject = City.objects.get(id=city_code)
     news = cache.get(cityObject.cache_key('news'))
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
@@ -299,7 +299,7 @@ def update_city(country_code, city_code):
     datetime.datetime.now(pytz.timezone(local_timezone))
 
     cityAndState = current_weather['location']['name']
-    fetchNews(country_code, city_code, cityAndState)
+    fetchNews(country_code, cityData, cityAndState)
     fetchState(country_code, city_code, cityAndState)
     fetchTwitter(cityData, current_weather)
     currentWeatherErrorCheck(current_weather)
