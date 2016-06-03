@@ -187,7 +187,7 @@ def tryTwitter(lat, long):
         twitterHandle = ''
         myList = [text, twitterHandle, text, twitterHandle, text, twitterHandle, ]  # , text1, twitterHandle1]
 
-    return myList;
+    return myList
 
 
 def fetchNews(country_code, city_code, cityAndState):
