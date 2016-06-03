@@ -281,7 +281,13 @@ def fetchTwitter(city_code, current_weather):
 
 """
 @param country_code  the country code of the given city
-@param city_code     the
+@param city_code     the id of the given city. This is used to get
+                        the city object.
+
+This method is used to update the caches for the city. This will
+make repeat calls to a city (with or without celery) much faster.
+This is the method called by the celery task. It will constantly
+update the cities in the background so that the user has no wait time.
 """
 def update_city(country_code, city_code):
     cityData = City.objects.get(id=city_code)
