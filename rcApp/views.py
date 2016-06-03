@@ -1,6 +1,23 @@
+"""
+@author Laura Macaluso
+@version 1.3, 06/3/2016
+
+Views.py is is used to call the home page and the detail page.
+The detail function will access and cache the data passed to
+the detail.html file. This function calls other functions to make
+its work easier.
+
+The Twitter API is used to grab 3 local tweets from the city the
+user selects. These tweets are selected using the city's
+latitude and longitude. The NYTimes API is used to access recent
+NYTimes articles based upon the country name. If the country is
+the United States of America, then it will grab the recent articles
+for the State. Pywapi is used to get the current weather from Weather.com
+based upon the city's location id (which is manually imported from the
+admin site).
+"""
 import datetime
 import json
-
 import pytz
 import pywapi
 import urllib2
@@ -16,6 +33,7 @@ from twython import Twython
 
 from .forms import CityForm
 from .models import *
+
 
 twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
@@ -131,7 +149,8 @@ def getNews(cityState, countryName):
     name = name.replace(' ', '%20')
 
     try:
-        url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/' + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
+        url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/'\
+              + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
         list = []
         f = urllib2.urlopen(url)
         # f = urllib.request.urlopen(url)
@@ -260,6 +279,10 @@ def fetchTwitter(city_code, current_weather):
     return text
 
 
+"""
+@param country_code  the country code of the given city
+@param city_code     the
+"""
 def update_city(country_code, city_code):
     cityData = City.objects.get(id=city_code)
 
