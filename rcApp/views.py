@@ -1,11 +1,11 @@
 import datetime
 import json
-import logging
 
 import pytz
 import pywapi
 import urllib2
 import us
+import logging
 from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -17,13 +17,14 @@ from twython import Twython
 from .forms import CityForm
 from .models import *
 
+
+
 twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 CACHE_TIME_DAY = 86400
 CACHE_TIME_FIVE = 60 * 5
 logger = logging.getLogger(__name__)
-
 
 @cache_page(60 * 40)
 def home(request):
@@ -41,6 +42,7 @@ def home(request):
 
 
 def detail(request, country_code, city_code):
+
     if country_code not in countries:
         logger.error('Invalid Country Code Error')
         raise Http404("Invalid Country Code")
@@ -108,7 +110,7 @@ def currentWeatherErrorCheck(current_weather):
     else:
         currentText = current_weather['current_conditions']['text']
 
-    return currentText + ' and'
+    return currentText
 
 
 def getState(countryName, cityState):
@@ -138,6 +140,7 @@ def getNews(cityState, countryName):
         content = f.read()
         decoded_response = content.decode('utf-8')
         jsonResponse = json.loads(decoded_response)
+
         length = len(jsonResponse["results"][0]["article_list"]["results"])
 
         if length > 0:
@@ -145,10 +148,11 @@ def getNews(cityState, countryName):
                 list.append(jsonResponse["results"][0]["article_list"]["results"][x]["title"])
         else:
             list = ['No Current News to Report']
+
+        return list
     except:
         list = ['No News to Report']
-
-    return list
+        return list
 
 
 def findTimezone(lat, long):

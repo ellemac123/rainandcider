@@ -8,4 +8,4 @@ class CityForm(forms.ModelForm):
         model = models.City
         fields = ('city',)
         args = models.City.objects.values_list('id', 'city')
-        widgets = {'city': Select(choices = list(args))}
+        widgets = {'city': Select(choices=list(args))}

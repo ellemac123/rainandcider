@@ -8,10 +8,11 @@ def en_zed():
 
 ''' changed country field from choices=list(countries) '''
 
+
 class City(models.Model):
-    country = CountryField(choices=list(countries));  # hold the country co
-    city = models.CharField(max_length=20);
-    location_id = models.CharField(max_length=8);
+    country = CountryField(choices=list(countries))
+    city = models.CharField(max_length=20)
+    location_id = models.CharField(max_length=8)
 
     def cache_key(self, type):
         return "{}_{}_{}".format(type, self.country, self.id)
