@@ -73,7 +73,7 @@ def detail(request, country_code, city_code):
     cityAndState = current_weather['location']['name']
     news = fetchNews(country_code, city_code, cityAndState)
     state = fetchState(country_code, city_code, cityAndState)
-    text = fetchTwitter(city_code, current_weather)
+    text = fetchTwitter(cityData, current_weather)
     currentText = currentWeatherErrorCheck(current_weather)
 
     logger.info('data is stored to be passed to detail.html')
