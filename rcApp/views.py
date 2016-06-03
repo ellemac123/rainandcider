@@ -64,7 +64,7 @@ def detail(request, country_code, city_code):
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
-    current_weather = fetchCurrentWeather(city_code, cityData)
+    current_weather = fetchCurrentWeather(cityData)
     current_icon = fetchCurrentIcon(city_code, current_weather)
     icons = fetchIcons(city_code, current_weather)
     local_timezone = fetchTimezone(city_code, current_weather)
@@ -261,11 +261,11 @@ def fetchIcons(city_code, current_weather):
     return icons
 
 
-def fetchCurrentWeather(city_code, cityData):
-    cityObject = City.objects.get(id=city_code)
+def fetchCurrentWeather(cityObject):
+   # cityObject = City.objects.get(id=city_code)
     current_weather = cache.get(cityObject.cache_key('current_weather'))
     if current_weather is None:
-        current_weather = pywapi.get_weather_from_weather_com(cityData.location_id)
+        current_weather = pywapi.get_weather_from_weather_com(cityObject.location_id)
         cache.set(cityObject.cache_key('current_weather'), current_weather, CACHE_TIME_FIVE)
     return current_weather
 
@@ -292,7 +292,7 @@ update the cities in the background so that the user has no wait time.
 def update_city(country_code, city_code):
     cityData = City.objects.get(id=city_code)
 
-    current_weather = fetchCurrentWeather(city_code, cityData)
+    current_weather = fetchCurrentWeather(cityData)
     fetchCurrentIcon(city_code, current_weather)
     fetchIcons(city_code, current_weather)
     local_timezone = fetchTimezone(city_code, current_weather)
