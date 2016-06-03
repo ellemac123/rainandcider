@@ -51,13 +51,13 @@ def detail(request, country_code, city_code):
     current_weather = fetchCurrentWeather(city_code, cityData)
     current_icon = fetchCurrentIcon(city_code, current_weather)
     icons = fetchIcons(city_code, current_weather)
-    local_timezone = fetchTimezone(country_code, city_code, current_weather)
+    local_timezone = fetchTimezone(city_code, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
     cityAndState = current_weather['location']['name']
     news = fetchNews(country_code, city_code, cityAndState)
     state = fetchState(country_code, city_code, cityAndState)
-    text = fetchTwitter(country_code, city_code, current_weather)
+    text = fetchTwitter(city_code, current_weather)
     currentText = currentWeatherErrorCheck(current_weather)
 
     logger.info('data is stored to be passed to detail.html')
