@@ -43,6 +43,15 @@ CACHE_TIME_DAY = 86400
 CACHE_TIME_FIVE = 60 * 5
 logger = logging.getLogger(__name__)
 
+"""
+@:param request
+
+The request to the home page. Uses the city form
+to get the city object that the user chooses.
+Uses the request.POST to use the home.html csrf
+token. Will also redirect the user to the detail
+page and the detail method based
+"""
 @cache_page(60 * 40)
 def home(request):
     logger.debug('The home page was called. ')
@@ -64,7 +73,6 @@ def home(request):
                             Used to create the country name.
 @:param city_code      The city id. This is the id automattically
                             created. Used to create a city object.
-
 The detail gets the data, checks if it has been cached, and if not
 it will cache the data. then it passes all that data to the
 detail.html file. The data is stored with a name, those names are
@@ -152,6 +160,18 @@ def getState(countryName, cityState):
     return ' ' + state
 
 
+"""
+@param cityState       the city and state string used to pass to the
+                            news. The API uses it to get the news from the
+                            state if there is a state, and if not it will use
+                            the country name.
+@:param countryName    the name of the country. used to get the country news.
+
+This function with get the country or state news from the NYTimes using the
+NYTimes api. The url contains the api-key which is unique. It is given to
+developers that are registered to grab data via searches. This data is in json
+and is parsed here.
+"""
 def getNews(cityState, countryName):
     name = str(countryName)
     if name == 'United States of America':
