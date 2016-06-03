@@ -48,9 +48,9 @@ def detail(request, country_code, city_code):
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
-    current_weather = fetchCurrentWeather(country_code, city_code, cityData)
-    current_icon = fetchCurrentIcon(country_code, city_code, current_weather)
-    icons = fetchIcons(country_code, city_code, current_weather)
+    current_weather = fetchCurrentWeather(city_code, cityData)
+    current_icon = fetchCurrentIcon(city_code, current_weather)
+    icons = fetchIcons(city_code, current_weather)
     local_timezone = fetchTimezone(country_code, city_code, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
