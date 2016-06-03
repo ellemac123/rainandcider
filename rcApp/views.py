@@ -65,14 +65,14 @@ def detail(request, country_code, city_code):
     cityData = City.objects.get(id=city_code)
 
     current_weather = fetchCurrentWeather(cityData)
-    current_icon = fetchCurrentIcon(city_code, current_weather)
-    icons = fetchIcons(city_code, current_weather)
+    current_icon = fetchCurrentIcon(cityData, current_weather)
+    icons = fetchIcons(cityData, current_weather)
     local_timezone = fetchTimezone(cityData, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
     cityAndState = current_weather['location']['name']
     news = fetchNews(country_code, cityData, cityAndState)
-    state = fetchState(country_code, city_code, cityAndState)
+    state = fetchState(country_code, cityData, cityAndState)
     text = fetchTwitter(cityData, current_weather)
     currentText = currentWeatherErrorCheck(current_weather)
 
@@ -216,8 +216,8 @@ def fetchNews(country_code, cityObject, cityAndState):
     return news
 
 
-def fetchState(country_code, city_code, cityAndState):
-    cityObject = City.objects.get(id=city_code)
+def fetchState(country_code, cityObject, cityAndState):
+    #cityObject = City.objects.get(id=city_code)
     state = cache.get(cityObject.cache_key('state'))
     if state is None:
         state = getState(str(Country(country_code).name), cityAndState)
@@ -235,8 +235,8 @@ def fetchTimezone(cityObject, current_weather):
     return local_timezone
 
 
-def fetchCurrentIcon(city_code, current_weather):
-    cityObject = City.objects.get(id=city_code)
+def fetchCurrentIcon(cityObject, current_weather):
+   # cityObject = City.objects.get(id=city_code)
     current_icon = cache.get(cityObject.cache_key('current_icon'))
     if current_icon is None:
         icon_num = current_weather['current_conditions']['icon']
@@ -248,8 +248,8 @@ def fetchCurrentIcon(city_code, current_weather):
     return current_icon
 
 
-def fetchIcons(city_code, current_weather):
-    cityObject = City.objects.get(id=city_code)
+def fetchIcons(cityObject, current_weather):
+    #cityObject = City.objects.get(id=city_code)
     icons = cache.get(cityObject.cache_key('icons'))
     if icons is None:
         day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
@@ -293,14 +293,14 @@ def update_city(country_code, city_code):
     cityData = City.objects.get(id=city_code)
 
     current_weather = fetchCurrentWeather(cityData)
-    fetchCurrentIcon(city_code, current_weather)
-    fetchIcons(city_code, current_weather)
+    fetchCurrentIcon(cityData, current_weather)
+    fetchIcons(cityData, current_weather)
     local_timezone = fetchTimezone(cityData, current_weather)
     datetime.datetime.now(pytz.timezone(local_timezone))
 
     cityAndState = current_weather['location']['name']
     fetchNews(country_code, cityData, cityAndState)
-    fetchState(country_code, city_code, cityAndState)
+    fetchState(country_code, cityData, cityAndState)
     fetchTwitter(cityData, current_weather)
     currentWeatherErrorCheck(current_weather)
     print("inside update city method")
