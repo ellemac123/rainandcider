@@ -14,7 +14,14 @@ from django_countries.fields import CountryField
 def en_zed():
     return 'NZ'
 
-
+"""
+This is the city model. It has three fields:
+country, which holds the country name, using
+django countries, city, which holds the city
+name, and location_id, which is the location
+id from weather.com. The location_id is used
+to get the weather forecast from pywapi.
+"""
 class City(models.Model):
     country = CountryField(choices=list(countries))
     city = models.CharField(max_length=20)
