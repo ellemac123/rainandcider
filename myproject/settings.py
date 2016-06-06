@@ -87,7 +87,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-
 if ON_OPENSHIFT:
     LOG_DIR = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''))
     CELERYBEAT_SCHEDULE_FILENAME = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
