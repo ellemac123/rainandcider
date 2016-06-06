@@ -17,7 +17,6 @@ import djcelery
 
 djcelery.setup_loader()
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 if 'OPENSHIFT_REPO_DIR' in os.environ:
@@ -25,19 +24,12 @@ if 'OPENSHIFT_REPO_DIR' in os.environ:
 else:
     ON_OPENSHIFT = False
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'ojzkkj+6x#(=4#=_5=6fjq8$@73t)#i(o&7*+#x)rz_tl-g21_'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-# Application definition
-
+s
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -93,7 +85,6 @@ if ON_OPENSHIFT:
                                                 'celerybeat_schedule')
     CELERYBEAT_SCHEDULE_PIDFILE = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
                                                'celerybeat.pid')
-    # REDIS_URL = "127.0.0.1:16379"
     REDIS_URL = "redis://:{}@{}:{}".format(os.environ.get('REDIS_PASSWORD', ''),
                                            os.environ.get('OPENSHIFT_REDIS_HOST', ''),
                                            os.environ.get('OPENSHIFT_REDIS_PORT', ''))
@@ -138,8 +129,6 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
 
 
-# Database
-# https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 if 'OPENSHIFT_REPO_DIR' in os.environ:
     DATABASES = {
         'default': {
@@ -157,7 +146,6 @@ else:
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -172,9 +160,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
-# Internationalization
-# https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -209,7 +194,6 @@ LOGGING = {
     },
 }
 
-# Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'rcApp', 'static')
 STATIC_URL = '/static/'
