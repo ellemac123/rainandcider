@@ -10,16 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
-import os, sys
+import os
 from datetime import timedelta
+from kombu import Exchange, Queue
 import djcelery
+
 djcelery.setup_loader()
-
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 if 'OPENSHIFT_REPO_DIR' in os.environ:
     ON_OPENSHIFT = True
@@ -54,7 +53,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = [
-    #'django.middleware.security.SecurityMiddleware',
+    # 'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -66,11 +65,9 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'myproject.urls'
 
-
 TEMPLATE_DIRS = (
-     os.path.join(BASE_DIR, 'rcApp', 'templates'),
+    os.path.join(BASE_DIR, 'rcApp', 'templates'),
 )
-
 
 TEMPLATES = [
     {
@@ -91,23 +88,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
 
-from kombu import Exchange, Queue
 if ON_OPENSHIFT:
     LOG_DIR = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''))
     CELERYBEAT_SCHEDULE_FILENAME = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
                                                 'celerybeat_schedule')
     CELERYBEAT_SCHEDULE_PIDFILE = os.path.join(os.environ.get('OPENSHIFT_DATA_DIR', ''),
-                                           'celerybeat.pid')
+                                               'celerybeat.pid')
     # REDIS_URL = "127.0.0.1:16379"
     REDIS_URL = "redis://:{}@{}:{}".format(os.environ.get('OPENSHIFT_REDIS_PASSWORD', ''),
-                                            os.environ.get('OPENSHIFT_REDIS_HOST', ''),
-                                             os.environ.get('OPENSHIFT_REDIS_PORT', ''))
+                                           os.environ.get('OPENSHIFT_REDIS_HOST', ''),
+                                           os.environ.get('OPENSHIFT_REDIS_PORT', ''))
 else:
     LOG_DIR = '.'
     CELERYBEAT_SCHEDULE_FILENAME = 'celerybeat_schedule'
     CELERYBEAT_SCHEDULE_PIDFILE = 'celerybeat.pid'
     REDIS_URL = "redis://127.0.0.1:16379"
-
 
 BROKER_URL = REDIS_URL
 CELERY_IMPORTS = ('rcApp.tasks')
@@ -128,8 +123,6 @@ CELERYBEAT_SCHEDULE = {
     },
 }
 
-
-
 #
 # CACHES = {
 #     "default": {
@@ -141,9 +134,9 @@ CELERYBEAT_SCHEDULE = {
 #     }
 # }
 #
-# # Causes django to use Redis for session information
-# SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
-# SESSION_CACHE_ALIAS = "default"
+# Causes django to use Redis for session information
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
+SESSION_CACHE_ALIAS = "default"
 
 
 # Database
@@ -163,8 +156,6 @@ else:
         }
     }
 
-
-
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
 
@@ -183,7 +174,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
@@ -200,12 +190,11 @@ USE_TZ = True
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 
-
 LOG_LEVEL = 'DEBUG' if DEBUG else 'INFO'
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers':{
+    'handlers': {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
@@ -213,11 +202,11 @@ LOGGING = {
         },
     },
     'loggers': {
-      'django': {
-          'handlers': ['file'],
-          'level': 'DEBUG',
-          'propagate': True,
-      },
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
 }
 
@@ -225,4 +214,3 @@ LOGGING = {
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'rcApp', 'static')
 STATIC_URL = '/static/'
-
