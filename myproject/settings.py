@@ -12,8 +12,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 from datetime import timedelta
-from kombu import Exchange, Queue
+
 import djcelery
+from kombu import Exchange, Queue
 
 djcelery.setup_loader()
 
@@ -127,7 +128,6 @@ CELERYBEAT_SCHEDULE = {
 # Causes django to use Redis for session information
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
-
 
 if 'OPENSHIFT_REPO_DIR' in os.environ:
     DATABASES = {
