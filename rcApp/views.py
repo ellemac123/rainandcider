@@ -19,11 +19,12 @@ timezone and thus get the current time for the location.
 """
 import datetime
 import json
+import logging
+
 import pytz
 import pywapi
 import urllib2
 import us
-import logging
 from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import redirect, render
@@ -34,7 +35,6 @@ from twython import Twython
 
 from .forms import CityForm
 from .models import *
-
 
 twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
@@ -52,6 +52,8 @@ Uses the request.POST to use the home.html csrf
 token. Will also redirect the user to the detail
 page and the detail method based
 """
+
+
 @cache_page(60 * 40)
 def home(request):
     logger.debug('The home page was called. ')
@@ -78,8 +80,9 @@ it will cache the data. then it passes all that data to the
 detail.html file. The data is stored with a name, those names are
 used to access the data in detail.html
 """
-def detail(request, country_code, city_code):
 
+
+def detail(request, country_code, city_code):
     if country_code not in countries:
         logger.error('Invalid Country Code Error')
         raise Http404("Invalid Country Code")
@@ -172,6 +175,8 @@ NYTimes api. The url contains the api-key which is unique. It is given to
 developers that are registered to grab data via searches. This data is in json
 and is parsed here.
 """
+
+
 def getNews(cityState, countryName):
     name = str(countryName)
     if name == 'United States of America':
@@ -182,7 +187,7 @@ def getNews(cityState, countryName):
     name = name.replace(' ', '%20')
 
     try:
-        url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/'\
+        url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/' \
               + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
         list = []
         f = urllib2.urlopen(url)
@@ -214,6 +219,7 @@ def findTimezone(lat, long):
 
 
 def tryTwitter(lat, long):
+    distance = '150'
     twitter = Twython(TWITTER_KEY, TWITTER_SECRET, oauth_version=2)
     ACCESS_TOKEN = twitter.obtain_access_token()
     twitter = Twython(TWITTER_KEY, access_token=ACCESS_TOKEN)
@@ -315,6 +321,8 @@ make repeat calls to a city (with or without celery) much faster.
 This is the method called by the celery task. It will constantly
 update the cities in the background so that the user has no wait time.
 """
+
+
 def update_city(country_code, city_code):
     cityData = City.objects.get(id=city_code)
 
