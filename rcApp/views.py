@@ -20,15 +20,14 @@ timezone and thus get the current time for the location.
 import datetime
 import json
 import logging
+import urllib2
 
 import pytz
 import pywapi
-import urllib2
 import us
 from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import redirect, render
-from django.views.decorators.cache import cache_page
 from django_countries.fields import Country
 from timezonefinder import TimezoneFinder
 from twython import Twython
@@ -68,20 +67,18 @@ def home(request):
         return render(request, 'home/home.html', {'cityform': cityform})
 
 
-"""
-@:param request        The request to be rendered upon return.
-@:param country_code   The country code of the given city object.
-                            Used to create the country name.
-@:param city_code      The city id. This is the id automattically
-                            created. Used to create a city object.
-The detail gets the data, checks if it has been cached, and if not
-it will cache the data. then it passes all that data to the
-detail.html file. The data is stored with a name, those names are
-used to access the data in detail.html
-"""
-
-
 def detail(request, country_code, city_code):
+    """
+    @:param request        The request to be rendered upon return.
+    @:param country_code   The country code of the given city object.
+                                Used to create the country name.
+    @:param city_code      The city id. This is the id automattically
+                                created. Used to create a city object.
+    The detail gets the data, checks if it has been cached, and if not
+    it will cache the data. then it passes all that data to the
+    detail.html file. The data is stored with a name, those names are
+    used to access the data in detail.html
+    """
     if country_code not in countries:
         logger.error('Invalid Country Code Error')
         raise Http404("Invalid Country Code")
@@ -162,21 +159,20 @@ def getState(countryName, cityState):
     return ' ' + state
 
 
-"""
-@param cityState       the city and state string used to pass to the
-                            news. The API uses it to get the news from the
-                            state if there is a state, and if not it will use
-                            the country name.
-@:param countryName    the name of the country. used to get the country news.
-
-This function with get the country or state news from the NYTimes using the
-NYTimes api. The url contains the api-key which is unique. It is given to
-developers that are registered to grab data via searches. This data is in json
-and is parsed here.
-"""
-
-
 def getNews(cityState, countryName):
+    """
+    @param cityState       the city and state string used to pass to the
+                                news. The API uses it to get the news from the
+                                state if there is a state, and if not it will use
+                                the country name.
+    @:param countryName    the name of the country. used to get the country news.
+
+    This function with get the country or state news from the NYTimes using the
+    NYTimes api. The url contains the api-key which is unique. It is given to
+    developers that are registered to grab data via searches. This data is in json
+    and is parsed here.
+    """
+
     name = str(countryName)
     if name == 'United States of America':
         stateCode = cityState[-2:]
@@ -310,19 +306,17 @@ def fetchTwitter(cityObject, current_weather):
     return text
 
 
-"""
-@param country_code  the country code of the given city
-@param city_code     the id of the given city. This is used to get
-                        the city object.
-
-This method is used to update the caches for the city. This will
-make repeat calls to a city (with or without celery) much faster.
-This is the method called by the celery task. It will constantly
-update the cities in the background so that the user has no wait time.
-"""
-
-
 def update_city(country_code, city_code):
+    """
+    @param country_code  the country code of the given city
+    @param city_code     the id of the given city. This is used to get
+                            the city object.
+
+    This method is used to update the caches for the city. This will
+    make repeat calls to a city (with or without celery) much faster.
+    This is the method called by the celery task. It will constantly
+    update the cities in the background so that the user has no wait time.
+    """
     cityData = City.objects.get(id=city_code)
 
     current_weather = fetchCurrentWeather(cityData)
