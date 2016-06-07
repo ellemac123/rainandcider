@@ -19,7 +19,6 @@ def update_cache():
     this is called. This is so the users will 'never' have
     to wait for the page to load.
     """
-    logger.debug('Called the cache')
     for city in City.objects.all():
         update_city(city.country, city.pk)
         logger.debug("updated the cache of : " + str(city.pk))
