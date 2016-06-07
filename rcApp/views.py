@@ -52,7 +52,7 @@ Uses the request.POST to use the home.html csrf
 token. Will also redirect the user to the detail
 page and the detail method based
 """
-@cache_page(60 * 40)
+#@cache_page(60 * 40)
 def home(request):
     logger.debug('The home page was called. ')
     cityform = CityForm()
@@ -60,9 +60,9 @@ def home(request):
         cityform = CityForm(request.POST)
         if cityform.is_valid():
             citydata = cityform.cleaned_data
-            cityInfo = City.objects.get(id=citydata['city'])
+            cityInfo = citydata['city']
             logger.info('request successfully changed')
-            return redirect('detail', country_code=cityInfo.country, city_code=citydata['city'])
+            return redirect('detail', country_code=cityInfo.country, city_code=cityInfo.id)
     else:
         return render(request, 'home/home.html', {'cityform': cityform})
 
