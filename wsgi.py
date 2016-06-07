@@ -1,6 +1,8 @@
 #!/usr/bin/python
+#Do not remove from myproject.wsgi import application #noqa
+
 import os
-from myproject.wsgi import application
+from myproject.wsgi import application #noqa
 
 virtenv = os.environ['OPENSHIFT_PYTHON_DIR'] + '/virtenv/'
 virtualenv = os.path.join(virtenv, 'bin/activate_this.py')
