@@ -43,25 +43,24 @@ CACHE_TIME_DAY = 86400
 CACHE_TIME_FIVE = 60 * 5
 logger = logging.getLogger(__name__)
 
-"""
-@:param request
-
-The request to the home page. Uses the city form
-to get the city object that the user chooses.
-Uses the request.POST to use the home.html csrf
-token. Will also redirect the user to the detail
-page and the detail method based
-"""
-
 
 def home(request):
+    """
+    @:param request
+
+    The request to the home page. Uses the city form
+    to get the city object that the user chooses.
+    Uses the request.POST to use the home.html csrf
+    token. Will also redirect the user to the detail
+    page and the detail method based
+    """
     logger.debug('The home page was called. ')
     cityform = CityForm()
     if request.method == 'POST':
         cityform = CityForm(request.POST)
         if cityform.is_valid():
             citydata = cityform.cleaned_data
-            cityInfo = City.objects.get(id=citydata['city'])
+            cityInfo = citydata['city']
             logger.info('request successfully changed')
             return redirect('detail', country_code=cityInfo.country, city_code=citydata['city'])
     else:
