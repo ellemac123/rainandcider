@@ -9,7 +9,7 @@ select a city from the ones created by the
 admin. Used by the home view and html.
 """
 class CityForm(forms.ModelForm):
-    city = forms.ModelChoiceField(queryset=City.objects.all(), empty_lable=None)
+    city = forms.ModelChoiceField(queryset=City.objects.all(), empty_label=None)
 
     # class Meta:
     #     model = models.City
