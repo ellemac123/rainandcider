@@ -26,7 +26,7 @@ else:
 
 SECRET_KEY = 'ojzkkj+6x#(=4#=_5=6fjq8$@73t)#i(o&7*+#x)rz_tl-g21_'
 
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
