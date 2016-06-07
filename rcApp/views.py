@@ -54,7 +54,6 @@ page and the detail method based
 """
 
 
-@cache_page(60 * 40)
 def home(request):
     logger.debug('The home page was called. ')
     cityform = CityForm()
