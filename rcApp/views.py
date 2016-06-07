@@ -62,7 +62,7 @@ def home(request):
             citydata = cityform.cleaned_data
             cityInfo = citydata['city']
             logger.info('request successfully changed')
-            return redirect('detail', country_code=cityInfo.country, city_code=citydata['city'])
+            return redirect('detail', country_code=citydata['country'], city_code=citydata['city'])
     else:
         return render(request, 'home/home.html', {'cityform': cityform})
 
