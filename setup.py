@@ -1,9 +1,9 @@
 from setuptools import setup
 
-setup(name='RainandCider',
+setup(name='YourAppName',
       version='1.0',
       description='OpenShift App',
-      author='Laura Macaluso',
-      author_email='lmacaluso@redlattice.com',
+      author='Your Name',
+      author_email='example@example.com',
       url='http://www.python.org/sigs/distutils-sig/',
       )
