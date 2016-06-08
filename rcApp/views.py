@@ -47,17 +47,17 @@ def home(request):
     page and the detail method based
     """
     logger.debug('The home page was called. ')
-    city_form = CityForm()
+    cityform = CityForm()
     if request.method == 'POST':
-        city_form = CityForm(request.POST)
-        if city_form.is_valid():
-            citydata = city_form.cleaned_data
+        cityform = CityForm(request.POST)
+        if cityform.is_valid():
+            citydata = cityform.cleaned_data
             cityInfo = citydata['city']
             logger.info('request successfully changed')
             print(str(cityInfo.city))
             return redirect('detail', country_code=cityInfo.country, city_code=cityInfo.id)
     else:
-        return render(request, 'home/home.html', {'city_form': city_form})
+        return render(request, 'home/home.html', {'cityform': cityform})
 
 
 def detail(request, country_code, city_code):
@@ -75,23 +75,23 @@ def detail(request, country_code, city_code):
     if country_code not in countries:
         logger.error('Invalid Country Code Error')
         raise Http404("Invalid Country Code")
-    city_data = City.objects.get(id=city_code)
+    cityData = City.objects.get(id=city_code)
 
-    current_weather = cache_current_weather_data(city_data)
-    current_icon = cache_current_icon(city_data, current_weather)
-    icons = cache_forecast_icons(city_data, current_weather)
-    local_timezone = cache_timezone(city_data, current_weather)
+    current_weather = cache_current_weather_data(cityData)
+    current_icon = cache_current_icon(cityData, current_weather)
+    icons = cache_forecast_icons(cityData, current_weather)
+    local_timezone = cache_timezone(cityData, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
-    city_state = current_weather['location']['name']
-    news = cache_news(country_code, city_data, city_state)
-    state = cache_state(country_code, city_data, city_state)
-    text = cache_twitter(city_data, current_weather)
-    current_text = weather_error_check(current_weather)
+    cityAndState = current_weather['location']['name']
+    news = cache_news(country_code, cityData, cityAndState)
+    state = cache_state(country_code, cityData, cityAndState)
+    text = cache_twitter(cityData, current_weather)
+    currentText = weather_error_check(current_weather)
 
     logger.info('data is stored to be passed to detail.html')
-    data = {'country': Country(country_code), 'city': city_data, 'state': state,
-            'current_conditions': current_text,
+    data = {'country': Country(country_code), 'city': cityData, 'state': state,
+            'current_conditions': currentText,
             'current_temperature': current_weather['current_conditions']['temperature'],
             'temperature_units': current_weather['units']['temperature'], 'current_icon': current_icon,
             'last_update': current_weather['current_conditions']['last_updated'],
@@ -141,17 +141,17 @@ def update_city(country_code, city_code):
     This is the method called by the celery task. It will constantly
     update the cities in the background so that the user has no wait time.
     """
-    city_data = City.objects.get(id=city_code)
+    cityData = City.objects.get(id=city_code)
 
-    current_weather = cache_current_weather_data(city_data)
-    cache_current_icon(city_data, current_weather)
-    cache_forecast_icons(city_data, current_weather)
-    local_timezone = cache_timezone(city_data, current_weather)
+    current_weather = cache_current_weather_data(cityData)
+    cache_current_icon(cityData, current_weather)
+    cache_forecast_icons(cityData, current_weather)
+    local_timezone = cache_timezone(cityData, current_weather)
     datetime.datetime.now(pytz.timezone(local_timezone))
 
-    city_state = current_weather['location']['name']
-    cache_news(country_code, city_data, city_state)
-    cache_state(country_code, city_data, city_state)
-    cache_twitter(city_data, current_weather)
+    cityAndState = current_weather['location']['name']
+    cache_news(country_code, cityData, cityAndState)
+    cache_state(country_code, cityData, cityAndState)
+    cache_twitter(cityData, current_weather)
     weather_error_check(current_weather)
     print("inside update city method")
