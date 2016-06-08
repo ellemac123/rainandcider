@@ -83,7 +83,7 @@
             </script>
 
             <div class="card" id="feedcard" variable={{twitterHandle}}>
-                <h4 id="twittFeed">@{{twitterHandle}} : {{twitterText}}</h4>
+                <h4 id="twittFeed">@{{twitter_text.1}} : {{twitter_text.0}}</h4>
                 <script>
                     var plant = document.getElementById('feedcard');
                     if(plant.getAttribute('variable') == ""){
@@ -130,8 +130,8 @@
                     </tr>
                     <tr>
                         <td><img src="{{icons.0}}"/></td>
-                        <td><img src="{{day2Icon}}"/></td>
-                        <td><img src="{{day3Icon}}"/></td>
+                        <td><img src="{{icons.1}}"/></td>
+                        <td><img src="{{icons.2}}"/></td>
                     </tr>
                     <tr>
                         <td>{{day1forecast}}</td>
