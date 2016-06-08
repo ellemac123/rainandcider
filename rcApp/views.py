@@ -83,9 +83,9 @@ def detail(request, country_code, city_code):
     local_timezone = cache_timezone(cityData, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
-    cityAndState = current_weather['location']['name']
-    news = cache_news(country_code, cityData, cityAndState)
-    state = cache_state(country_code, cityData, cityAndState)
+    city_state = current_weather['location']['name']
+    news = cache_news(country_code, cityData, city_state)
+    state = cache_state(country_code, cityData, city_state)
     text = cache_twitter(cityData, current_weather)
     currentText = weather_error_check(current_weather)
 
