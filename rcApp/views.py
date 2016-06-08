@@ -107,7 +107,7 @@ def detail(request, country_code, city_code):
             'timezone': local_timezone,
             'current_time': current_time,
             'tommDate': current_weather['forecasts'][1]['date'],
-            'news': news,
+            'news': news, 'icons': icons,
             'date2': current_weather['forecasts'][2]['date'], 'date3': current_weather['forecasts'][3]['date'],
             'day1forecast': current_weather['forecasts'][1]['day']['brief_text'], 'day1Icon': icons[0],
             'day1_precip': current_weather['forecasts'][1]['day']['chance_precip'],
