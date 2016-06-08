@@ -114,17 +114,6 @@ CELERYBEAT_SCHEDULE = {
     },
 }
 
-#
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django_redis.cache.RedisCache",
-#         "LOCATION": REDIS_URL,
-#         "OPTIONS": {
-#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-#         }
-#     }
-# }
-#
 # Causes django to use Redis for session information
 SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 SESSION_CACHE_ALIAS = "default"
@@ -182,7 +171,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'app-root/logs/debug.log'
+            'filename': os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'debug.log')
         },
     },
     'loggers': {
