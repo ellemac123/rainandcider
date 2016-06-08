@@ -39,7 +39,7 @@ def get_state(countryName, cityState):
     return ' ' + state
 
 
-def getNews(cityState, countryName):
+def get_news(cityState, countryName):
     """
     @param cityState       the city and state string used to pass to the
                                 news. The API uses it to get the news from the
@@ -123,7 +123,7 @@ def get_twitter_data(lat, long):
 def cache_news(country_code, cityObject, cityAndState):
     news = cache.get(cityObject.cache_key('news'))
     if news is None:
-        news = getNews(cityAndState, countryName=str(Country(country_code).name))
+        news = get_news(cityAndState, countryName=str(Country(country_code).name))
         cache.set(cityObject.cache_key('news'), news, CACHE_TIME_DAY)
     return news
 
