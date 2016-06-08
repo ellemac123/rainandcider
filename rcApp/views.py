@@ -75,23 +75,23 @@ def detail(request, country_code, city_code):
     if country_code not in countries:
         logger.error('Invalid Country Code Error')
         raise Http404("Invalid Country Code")
-    cityData = City.objects.get(id=city_code)
+    city_data = City.objects.get(id=city_code)
 
-    current_weather = cache_current_weather_data(cityData)
-    current_icon = cache_current_icon(cityData, current_weather)
-    icons = cache_forecast_icons(cityData, current_weather)
-    local_timezone = cache_timezone(cityData, current_weather)
+    current_weather = cache_current_weather_data(city_data)
+    current_icon = cache_current_icon(city_data, current_weather)
+    icons = cache_forecast_icons(city_data, current_weather)
+    local_timezone = cache_timezone(city_data, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
     city_state = current_weather['location']['name']
-    news = cache_news(country_code, cityData, city_state)
-    state = cache_state(country_code, cityData, city_state)
-    text = cache_twitter(cityData, current_weather)
-    currentText = weather_error_check(current_weather)
+    news = cache_news(country_code, city_data, city_state)
+    state = cache_state(country_code, city_data, city_state)
+    text = cache_twitter(city_data, current_weather)
+    current_text = weather_error_check(current_weather)
 
     logger.info('data is stored to be passed to detail.html')
-    data = {'country': Country(country_code), 'city': cityData, 'state': state,
-            'current_conditions': currentText,
+    data = {'country': Country(country_code), 'city': city_data, 'state': state,
+            'current_conditions': current_text,
             'current_temperature': current_weather['current_conditions']['temperature'],
             'temperature_units': current_weather['units']['temperature'], 'current_icon': current_icon,
             'last_update': current_weather['current_conditions']['last_updated'],
