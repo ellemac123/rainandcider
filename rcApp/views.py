@@ -141,17 +141,17 @@ def update_city(country_code, city_code):
     This is the method called by the celery task. It will constantly
     update the cities in the background so that the user has no wait time.
     """
-    cityData = City.objects.get(id=city_code)
+    city_data = City.objects.get(id=city_code)
 
-    current_weather = cache_current_weather_data(cityData)
-    cache_current_icon(cityData, current_weather)
-    cache_forecast_icons(cityData, current_weather)
-    local_timezone = cache_timezone(cityData, current_weather)
+    current_weather = cache_current_weather_data(city_data)
+    cache_current_icon(city_data, current_weather)
+    cache_forecast_icons(city_data, current_weather)
+    local_timezone = cache_timezone(city_data, current_weather)
     datetime.datetime.now(pytz.timezone(local_timezone))
 
-    cityAndState = current_weather['location']['name']
-    cache_news(country_code, cityData, cityAndState)
-    cache_state(country_code, cityData, cityAndState)
-    cache_twitter(cityData, current_weather)
+    city_state = current_weather['location']['name']
+    cache_news(country_code, city_data, city_state)
+    cache_state(country_code, city_data, city_state)
+    cache_twitter(city_data, current_weather)
     weather_error_check(current_weather)
     print("inside update city method")
