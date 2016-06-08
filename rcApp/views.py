@@ -17,24 +17,23 @@ based upon the city's location id (which is manually inputted from the
 admin site by the user). Timezonefinder package is also used to fine the
 timezone and thus get the current time for the location.
 """
-import datetime
 import json
 import logging
 import urllib2
 
+import datetime
 import pytz
 import pywapi
 import us
 from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import redirect, render
+from django_countries import countries
 from django_countries.fields import Country
-from timezonefinder import TimezoneFinder
-from twython import Twython
 
+from .city_utils import *
 from .forms import CityForm
 from .models import *
-from .city_utils import *
 
 twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
@@ -136,7 +135,6 @@ def detail(request, country_code, city_code):
             'wind2_direction': current_weather['forecasts'][2]['day']['wind']['text'],
             'wind3_direction': current_weather['forecasts'][3]['day']['wind']['text']}
     return render(request, 'country/detail.html', data)
-
 
 
 def update_city(country_code, city_code):

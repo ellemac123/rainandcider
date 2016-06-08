@@ -1,16 +1,15 @@
-import logging
-
-import us
-import datetime
 import json
+import logging
 import logging
 import urllib2
 
+import datetime
 import pytz
 import pywapi
 import us
-from django_countries.fields import Country
+import us
 from django.core.cache import cache
+from django_countries.fields import Country
 from timezonefinder import TimezoneFinder
 from twython import Twython
 
