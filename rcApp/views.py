@@ -47,17 +47,17 @@ def home(request):
     page and the detail method based
     """
     logger.debug('The home page was called. ')
-    city_form = CityForm()
+    cityform = CityForm()
     if request.method == 'POST':
-        city_form = CityForm(request.POST)
-        if city_form.is_valid():
-            citydata = city_form.cleaned_data
+        cityform = CityForm(request.POST)
+        if cityform.is_valid():
+            citydata = cityform.cleaned_data
             cityInfo = citydata['city']
             logger.info('request successfully changed')
             print(str(cityInfo.city))
             return redirect('detail', country_code=cityInfo.country, city_code=cityInfo.id)
     else:
-        return render(request, 'home/home.html', {'city_form': city_form})
+        return render(request, 'home/home.html', {'cityform': cityform})
 
 
 def detail(request, country_code, city_code):
