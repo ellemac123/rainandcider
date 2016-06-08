@@ -82,7 +82,7 @@
                     }
             </script>
 
-            <div class="card" id="feedcard" variable={{twitterHandle}}>
+            <div class="card" id="feedcard" variable={{twitter_text.0}}>
                 <h4 id="twittFeed">@{{twitter_text.1}} : {{twitter_text.0}}</h4>
                 <script>
                     var plant = document.getElementById('feedcard');
@@ -91,8 +91,8 @@
                     }
                 </script>
             </div>
-            <div class="card" id="feedcard1" variable={{twitterHandle1}}>
-                <h4 id="twittFeed1">@{{twitterHandle1}} : {{twitterText1}}</h4>
+            <div class="card" id="feedcard1" variable={{twitter_text.3}}>
+                <h4 id="twittFeed1">@{{twitter_text.3}} : {{twitter_text.2}}</h4>
                 <script>
                     var plant = document.getElementById('feedcard1');
                     if(plant.getAttribute('variable') == ""){
@@ -100,8 +100,8 @@
                     }
                 </script>
             </div>
-            <div class="card" id="feedcard2" variable={{twitterHandle2}}>
-                <h4 id="twittFeed2">@{{twitterHandle2}} : {{twitterText2}}</h4>
+            <div class="card" id="feedcard2" variable={{twitter_text.5}}>
+                <h4 id="twittFeed2">@{{twitter_text.5}} : {{twitter_text.4}}</h4>
                 <script>
                     var plant = document.getElementById('feedcard2');
                     if(plant.getAttribute('variable') == ""){
