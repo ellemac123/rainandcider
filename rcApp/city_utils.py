@@ -84,21 +84,21 @@ def get_news(cityState, countryName):
         return news_list
 
 
-def find_timezone(lat, long):
+def find_timezone(latitude, longitude):
     tf = TimezoneFinder()
-    point = (float(long), float(lat))
-    timezone_name = tf.timezone_at(*point)
+    geo_point = (float(longitude), float(latitude))
+    timezone_name = tf.timezone_at(*geo_point)
 
     return timezone_name
 
 
-def get_twitter_data(lat, long):
+def get_twitter_data(latitude, longitude):
     distance = '150'
     twitter = Twython(TWITTER_KEY, TWITTER_SECRET, oauth_version=2)
-    ACCESS_TOKEN = twitter.obtain_access_token()
-    twitter = Twython(TWITTER_KEY, access_token=ACCESS_TOKEN)
-    geoString = lat + ',' + long + ',150mi'
-    a = twitter.search(q='#news', geocode=geoString, count=10)
+    access_token = twitter.obtain_access_token()
+    twitter = Twython(TWITTER_KEY, access_token=access_token)
+    geo_string = latitude + ',' + longitude + ',150mi'
+    a = twitter.search(q='#news', geocode=geo_string, count=10)
     list_length = len(a['statuses'])
     try:
         if list_length > 2:
@@ -119,20 +119,20 @@ def get_twitter_data(lat, long):
     return myList
 
 
-def cache_news(country_code, cityObject, cityAndState):
-    news = cache.get(cityObject.cache_key('news'))
+def cache_news(country_code, city_object, city_state):
+    news = cache.get(city_object.cache_key('news'))
     if news is None:
-        news = get_news(cityAndState, countryName=str(Country(country_code).name))
-        cache.set(cityObject.cache_key('news'), news, CACHE_TIME_DAY)
+        news = get_news(city_state, countryName=str(Country(country_code).name))
+        cache.set(city_object.cache_key('news'), news, CACHE_TIME_DAY)
     return news
 
 
-def cache_state(country_code, cityObject, cityAndState):
-    state = cache.get(cityObject.cache_key('state'))
+def cache_state(country_code, city_object, city_state):
+    state = cache.get(city_object.cache_key('state'))
     if state is None:
-        state = get_state(str(Country(country_code).name), cityAndState)
-        cache.set(cityObject.cache_key('state'), state, CACHE_TIME_DAY)
-        print(str(cityObject.cache_key('state')))
+        state = get_state(str(Country(country_code).name), city_state)
+        cache.set(city_object.cache_key('state'), state, CACHE_TIME_DAY)
+        print(str(city_object.cache_key('state')))
     return state
 
 
@@ -176,9 +176,9 @@ def cache_current_weather_data(city_object):
     return current_weather
 
 
-def cache_twitter(cityObject, current_weather):
-    text = cache.get(cityObject.cache_key('twitter'))
+def cache_twitter(city_object, current_weather):
+    text = cache.get(city_object.cache_key('twitter'))
     if text is None:
         text = get_twitter_data(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set(cityObject.cache_key('twitter'), text, CACHE_TIME_FIVE)
+        cache.set(city_object.cache_key('twitter'), text, CACHE_TIME_FIVE)
     return text
