@@ -34,7 +34,7 @@ from twython import Twython
 
 from .forms import CityForm
 from .models import *
-
+from .city_utils import *
 
 twitterHandle = ''
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
@@ -136,28 +136,6 @@ def detail(request, country_code, city_code):
             'wind2_direction': current_weather['forecasts'][2]['day']['wind']['text'],
             'wind3_direction': current_weather['forecasts'][3]['day']['wind']['text']}
     return render(request, 'country/detail.html', data)
-
-
-def currentWeatherErrorCheck(current_weather):
-    if current_weather['current_conditions']['text'] == '':
-        logger.debug('current weather is unavailable - trying to get weather from brief text')
-        currentText = current_weather['forecasts'][0]['day']['brief_text']
-        if currentText == '':
-            currentText = 'information is currently unavailable'
-    else:
-        currentText = current_weather['current_conditions']['text']
-
-    return currentText
-
-
-def getState(countryName, cityState):
-    state = ' '
-    name = str(countryName)
-    if name == 'United States of America':
-        stateCode = cityState[-2:]
-        state = us.states.lookup(stateCode)
-        state = state.name + ', '
-    return ' ' + state
 
 
 def getNews(cityState, countryName):
