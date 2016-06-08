@@ -39,22 +39,22 @@ def get_state(countryName, cityState):
     return ' ' + state
 
 
-def get_news(cityState, countryName):
+def get_news(city_state, country_name):
     """
-    @param cityState       the city and state string used to pass to the
+    @param city_state       the city and state string used to pass to the
                                 news. The API uses it to get the news from the
                                 state if there is a state, and if not it will use
                                 the country name.
-    @:param countryName    the name of the country. used to get the country news.
+    @:param country_name    the name of the country. used to get the country news.
 
     This function with get the country or state news from the NYTimes using the
     NYTimes api. The url contains the api-key which is unique. It is given to
     developers that are registered to grab data via searches. This data is in json
     and is parsed here.
     """
-    name = str(countryName)
+    name = str(country_name)
     if name == 'United States of America':
-        state_code = cityState[-2:]
+        state_code = city_state[-2:]
         state = us.states.lookup(state_code)
         state = state.name
         name = state
@@ -68,13 +68,13 @@ def get_news(cityState, countryName):
         # f = urllib.request.urlopen(url)
         content = f.read()
         decoded_response = content.decode('utf-8')
-        jsonResponse = json.loads(decoded_response)
+        json_response = json.loads(decoded_response)
 
-        length = len(jsonResponse["results"][0]["article_list"]["results"])
+        length = len(json_response["results"][0]["article_list"]["results"])
 
         if length > 0:
             for x in range(length):
-                news_list.append(jsonResponse["results"][0]["article_list"]["results"][x]["title"])
+                news_list.append(json_response["results"][0]["article_list"]["results"][x]["title"])
         else:
             news_list = ['No Current News to Report']
 
@@ -103,20 +103,20 @@ def get_twitter_data(latitude, longitude):
     try:
         if list_length > 2:
             text = a['statuses'][0]['text']
-            twitterHandle = a['statuses'][0]['user']['screen_name']
+            twitter_handle = a['statuses'][0]['user']['screen_name']
             text1 = a['statuses'][1]['text']
-            twitterHandle1 = a['statuses'][1]['user']['screen_name']
+            twitter_handle1 = a['statuses'][1]['user']['screen_name']
             text2 = a['statuses'][2]['text']
-            twitterHandle2 = a['statuses'][2]['user']['screen_name']
-            myList = [text, twitterHandle, text1, twitterHandle1, text2, twitterHandle2]
+            twitter_handle2 = a['statuses'][2]['user']['screen_name']
+            my_list = [text, twitter_handle, text1, twitter_handle1, text2, twitter_handle2]
         else:
             raise Exception
     except:
         text = 'no news to report'
-        twitterHandle = ''
-        myList = [text, twitterHandle, text, twitterHandle, text, twitterHandle, ]  # , text1, twitterHandle1]
+        twitter_handle = ''
+        my_list = [text, twitter_handle, text, twitter_handle, text, twitter_handle, ]  # , text1, twitterHandle1]
 
-    return myList
+    return my_list
 
 
 def cache_news(country_code, city_object, city_state):
