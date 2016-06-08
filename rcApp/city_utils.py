@@ -17,7 +17,7 @@ CACHE_TIME_FIVE = 60 * 5
 logger = logging.getLogger(__name__)
 
 
-def currentWeatherErrorCheck(current_weather):
+def weather_error_check(current_weather):
     if current_weather['current_conditions']['text'] == '':
         logger.debug('current weather is unavailable - trying to get weather from brief text')
         currentText = current_weather['forecasts'][0]['day']['brief_text']
@@ -29,7 +29,7 @@ def currentWeatherErrorCheck(current_weather):
     return currentText
 
 
-def getState(countryName, cityState):
+def get_state(countryName, cityState):
     state = ' '
     name = str(countryName)
     if name == 'United States of America':
@@ -85,7 +85,7 @@ def getNews(cityState, countryName):
         return list
 
 
-def findTimezone(lat, long):
+def find_timezone(lat, long):
     tf = TimezoneFinder()
     point = (float(long), float(lat))
     timezoneName = tf.timezone_at(*point)
@@ -93,7 +93,7 @@ def findTimezone(lat, long):
     return timezoneName
 
 
-def tryTwitter(lat, long):
+def get_twitter_data(lat, long):
     distance = '150'
     twitter = Twython(TWITTER_KEY, TWITTER_SECRET, oauth_version=2)
     ACCESS_TOKEN = twitter.obtain_access_token()
@@ -101,7 +101,6 @@ def tryTwitter(lat, long):
     geoString = lat + ',' + long + ',150mi'
     a = twitter.search(q='#news', geocode=geoString, count=10)
     list_length = len(a['statuses'])
-
     try:
         if list_length > 2:
             text = a['statuses'][0]['text']
@@ -121,7 +120,7 @@ def tryTwitter(lat, long):
     return myList
 
 
-def fetchNews(country_code, cityObject, cityAndState):
+def cache_news(country_code, cityObject, cityAndState):
     news = cache.get(cityObject.cache_key('news'))
     if news is None:
         news = getNews(cityAndState, countryName=str(Country(country_code).name))
@@ -129,24 +128,24 @@ def fetchNews(country_code, cityObject, cityAndState):
     return news
 
 
-def fetchState(country_code, cityObject, cityAndState):
+def cache_state(country_code, cityObject, cityAndState):
     state = cache.get(cityObject.cache_key('state'))
     if state is None:
-        state = getState(str(Country(country_code).name), cityAndState)
+        state = get_state(str(Country(country_code).name), cityAndState)
         cache.set(cityObject.cache_key('state'), state, CACHE_TIME_DAY)
         print(str(cityObject.cache_key('state')))
     return state
 
 
-def fetchTimezone(cityObject, current_weather):
+def cache_timezone(cityObject, current_weather):
     local_timezone = cache.get(cityObject.cache_key('timezone'))
     if local_timezone is None:
-        local_timezone = findTimezone(current_weather['location']['lat'], current_weather['location']['lon'])
+        local_timezone = find_timezone(current_weather['location']['lat'], current_weather['location']['lon'])
         cache.set(cityObject.cache_key('timezone'), local_timezone, CACHE_TIME_DAY)
     return local_timezone
 
 
-def fetchCurrentIcon(cityObject, current_weather):
+def cache_current_icon(cityObject, current_weather):
     current_icon = cache.get(cityObject.cache_key('current_icon'))
     if current_icon is None:
         icon_num = current_weather['current_conditions']['icon']
@@ -158,7 +157,7 @@ def fetchCurrentIcon(cityObject, current_weather):
     return current_icon
 
 
-def fetchIcons(cityObject, current_weather):
+def cache_forecast_icons(cityObject, current_weather):
     icons = cache.get(cityObject.cache_key('icons'))
     if icons is None:
         day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
@@ -170,7 +169,7 @@ def fetchIcons(cityObject, current_weather):
     return icons
 
 
-def fetchCurrentWeather(cityObject):
+def cache_current_weather_data(cityObject):
     current_weather = cache.get(cityObject.cache_key('current_weather'))
     if current_weather is None:
         current_weather = pywapi.get_weather_from_weather_com(cityObject.location_id)
@@ -178,9 +177,9 @@ def fetchCurrentWeather(cityObject):
     return current_weather
 
 
-def fetchTwitter(cityObject, current_weather):
+def cache_twitter(cityObject, current_weather):
     text = cache.get(cityObject.cache_key('twitter'))
     if text is None:
-        text = tryTwitter(current_weather['location']['lat'], current_weather['location']['lon'])
+        text = get_twitter_data(current_weather['location']['lat'], current_weather['location']['lon'])
         cache.set(cityObject.cache_key('twitter'), text, CACHE_TIME_FIVE)
     return text

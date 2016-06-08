@@ -77,17 +77,17 @@ def detail(request, country_code, city_code):
         raise Http404("Invalid Country Code")
     cityData = City.objects.get(id=city_code)
 
-    current_weather = fetchCurrentWeather(cityData)
-    current_icon = fetchCurrentIcon(cityData, current_weather)
-    icons = fetchIcons(cityData, current_weather)
-    local_timezone = fetchTimezone(cityData, current_weather)
+    current_weather = cache_current_weather_data(cityData)
+    current_icon = cache_current_icon(cityData, current_weather)
+    icons = cache_forecast_icons(cityData, current_weather)
+    local_timezone = cache_timezone(cityData, current_weather)
     current_time = datetime.datetime.now(pytz.timezone(local_timezone))
 
     cityAndState = current_weather['location']['name']
-    news = fetchNews(country_code, cityData, cityAndState)
-    state = fetchState(country_code, cityData, cityAndState)
-    text = fetchTwitter(cityData, current_weather)
-    currentText = currentWeatherErrorCheck(current_weather)
+    news = cache_news(country_code, cityData, cityAndState)
+    state = cache_state(country_code, cityData, cityAndState)
+    text = cache_twitter(cityData, current_weather)
+    currentText = weather_error_check(current_weather)
 
     logger.info('data is stored to be passed to detail.html')
     data = {'country': Country(country_code), 'city': cityData, 'state': state,
@@ -143,15 +143,15 @@ def update_city(country_code, city_code):
     """
     cityData = City.objects.get(id=city_code)
 
-    current_weather = fetchCurrentWeather(cityData)
-    fetchCurrentIcon(cityData, current_weather)
-    fetchIcons(cityData, current_weather)
-    local_timezone = fetchTimezone(cityData, current_weather)
+    current_weather = cache_current_weather_data(cityData)
+    cache_current_icon(cityData, current_weather)
+    cache_forecast_icons(cityData, current_weather)
+    local_timezone = cache_timezone(cityData, current_weather)
     datetime.datetime.now(pytz.timezone(local_timezone))
 
     cityAndState = current_weather['location']['name']
-    fetchNews(country_code, cityData, cityAndState)
-    fetchState(country_code, cityData, cityAndState)
-    fetchTwitter(cityData, current_weather)
-    currentWeatherErrorCheck(current_weather)
+    cache_news(country_code, cityData, cityAndState)
+    cache_state(country_code, cityData, cityAndState)
+    cache_twitter(cityData, current_weather)
+    weather_error_check(current_weather)
     print("inside update city method")
