@@ -29,11 +29,11 @@ def weather_error_check(current_weather):
     return current_text
 
 
-def get_state(countryName, cityState):
+def get_state(country_name, city_state):
     state = ' '
-    name = str(countryName)
+    name = str(country_name)
     if name == 'United States of America':
-        state_code = cityState[-2:]
+        state_code = city_state[-2:]
         state = us.states.lookup(state_code)
         state = state.name + ', '
     return ' ' + state
@@ -45,7 +45,7 @@ def get_news(city_state, country_name):
                                 news. The API uses it to get the news from the
                                 state if there is a state, and if not it will use
                                 the country name.
-    @:param country_name    the name of the country. used to get the country news.
+    @param country_name    the name of the country. used to get the country news.
 
     This function with get the country or state news from the NYTimes using the
     NYTimes api. The url contains the api-key which is unique. It is given to
