@@ -76,10 +76,10 @@ def get_news(city_state, country_name):
             for x in range(length):
                 news_list.append(json_response["results"][0]["article_list"]["results"][x]["title"])
         else:
-            news_list = ['No Current News to Report']
-
+            raise ValueError
+#            news_list = ['No Current News to Report']
         return news_list
-    except:
+    except ValueError:
         news_list = ['No News to Report']
         return news_list
 
@@ -93,11 +93,11 @@ def find_timezone(latitude, longitude):
 
 
 def get_twitter_data(latitude, longitude):
-    distance = '150'
+    distance = '150mi'
     twitter = Twython(TWITTER_KEY, TWITTER_SECRET, oauth_version=2)
     access_token = twitter.obtain_access_token()
     twitter = Twython(TWITTER_KEY, access_token=access_token)
-    geo_string = latitude + ',' + longitude + ',150mi'
+    geo_string = latitude + ',' + longitude + ',' + distance
     a = twitter.search(q='#news', geocode=geo_string, count=10)
     list_length = len(a['statuses'])
     try:
