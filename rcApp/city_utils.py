@@ -110,8 +110,8 @@ def get_twitter_data(latitude, longitude):
             twitter_handle2 = a['statuses'][2]['user']['screen_name']
             my_list = [text, twitter_handle, text1, twitter_handle1, text2, twitter_handle2]
         else:
-            raise Exception
-    except:
+            raise ValueError
+    except ValueError:
         text = 'no news to report'
         twitter_handle = ''
         my_list = [text, twitter_handle, text, twitter_handle, text, twitter_handle, ]  # , text1, twitterHandle1]
