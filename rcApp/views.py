@@ -17,19 +17,12 @@ based upon the city's location id (which is manually inputted from the
 admin site by the user). Timezonefinder package is also used to fine the
 timezone and thus get the current time for the location.
 """
-import json
-import logging
-import urllib2
 
 import datetime
+
 import pytz
-import pywapi
-import us
-from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import redirect, render
-from django_countries import countries
-from django_countries.fields import Country
 
 from .city_utils import *
 from .forms import CityForm

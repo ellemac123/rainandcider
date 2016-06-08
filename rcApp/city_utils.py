@@ -1,12 +1,8 @@
 import json
 import logging
-import logging
 import urllib2
 
-import datetime
-import pytz
 import pywapi
-import us
 import us
 from django.core.cache import cache
 from django_countries.fields import Country
