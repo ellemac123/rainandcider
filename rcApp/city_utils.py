@@ -122,7 +122,7 @@ def get_twitter_data(latitude, longitude):
 def cache_news(country_code, city_object, city_state):
     news = cache.get(city_object.cache_key('news'))
     if news is None:
-        news = get_news(city_state, countryName=str(Country(country_code).name))
+        news = get_news(city_state, country_name=str(Country(country_code).name))
         cache.set(city_object.cache_key('news'), news, CACHE_TIME_DAY)
     return news
 
