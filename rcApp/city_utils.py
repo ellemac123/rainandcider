@@ -20,21 +20,21 @@ logger = logging.getLogger(__name__)
 def weather_error_check(current_weather):
     if current_weather['current_conditions']['text'] == '':
         logger.debug('current weather is unavailable - trying to get weather from brief text')
-        currentText = current_weather['forecasts'][0]['day']['brief_text']
-        if currentText == '':
-            currentText = 'information is currently unavailable'
+        current_text = current_weather['forecasts'][0]['day']['brief_text']
+        if current_text == '':
+            current_text = 'information is currently unavailable'
     else:
-        currentText = current_weather['current_conditions']['text']
+        current_text = current_weather['current_conditions']['text']
 
-    return currentText
+    return current_text
 
 
 def get_state(countryName, cityState):
     state = ' '
     name = str(countryName)
     if name == 'United States of America':
-        stateCode = cityState[-2:]
-        state = us.states.lookup(stateCode)
+        state_code = cityState[-2:]
+        state = us.states.lookup(state_code)
         state = state.name + ', '
     return ' ' + state
 
@@ -52,11 +52,10 @@ def get_news(cityState, countryName):
     developers that are registered to grab data via searches. This data is in json
     and is parsed here.
     """
-
     name = str(countryName)
     if name == 'United States of America':
-        stateCode = cityState[-2:]
-        state = us.states.lookup(stateCode)
+        state_code = cityState[-2:]
+        state = us.states.lookup(state_code)
         state = state.name
         name = state
     name = name.replace(' ', '%20')
@@ -64,7 +63,7 @@ def get_news(cityState, countryName):
     try:
         url = 'http://api.nytimes.com/svc/semantic/v2/concept/name/nytd_geo/' \
               + name + '.json?fields=all&api-key=694311ac0a739a6c388fcebe9605c7d9:11:75176215'
-        list = []
+        news_list = []
         f = urllib2.urlopen(url)
         # f = urllib.request.urlopen(url)
         content = f.read()
@@ -75,22 +74,22 @@ def get_news(cityState, countryName):
 
         if length > 0:
             for x in range(length):
-                list.append(jsonResponse["results"][0]["article_list"]["results"][x]["title"])
+                news_list.append(jsonResponse["results"][0]["article_list"]["results"][x]["title"])
         else:
-            list = ['No Current News to Report']
+            news_list = ['No Current News to Report']
 
-        return list
+        return news_list
     except:
-        list = ['No News to Report']
-        return list
+        news_list = ['No News to Report']
+        return news_list
 
 
 def find_timezone(lat, long):
     tf = TimezoneFinder()
     point = (float(long), float(lat))
-    timezoneName = tf.timezone_at(*point)
+    timezone_name = tf.timezone_at(*point)
 
-    return timezoneName
+    return timezone_name
 
 
 def get_twitter_data(lat, long):
@@ -137,43 +136,43 @@ def cache_state(country_code, cityObject, cityAndState):
     return state
 
 
-def cache_timezone(cityObject, current_weather):
-    local_timezone = cache.get(cityObject.cache_key('timezone'))
+def cache_timezone(city_object, current_weather):
+    local_timezone = cache.get(city_object.cache_key('timezone'))
     if local_timezone is None:
         local_timezone = find_timezone(current_weather['location']['lat'], current_weather['location']['lon'])
-        cache.set(cityObject.cache_key('timezone'), local_timezone, CACHE_TIME_DAY)
+        cache.set(city_object.cache_key('timezone'), local_timezone, CACHE_TIME_DAY)
     return local_timezone
 
 
-def cache_current_icon(cityObject, current_weather):
-    current_icon = cache.get(cityObject.cache_key('current_icon'))
+def cache_current_icon(city_object, current_weather):
+    current_icon = cache.get(city_object.cache_key('current_icon'))
     if current_icon is None:
         icon_num = current_weather['current_conditions']['icon']
         # if no current conditions, get day forecast
         if icon_num == '':
             icon_num = current_weather['forecasts'][0]['day']['icon']
         current_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(icon_num)
-        cache.set(cityObject.cache_key('current_icon'), current_icon, CACHE_TIME_FIVE)
+        cache.set(city_object.cache_key('current_icon'), current_icon, CACHE_TIME_FIVE)
     return current_icon
 
 
-def cache_forecast_icons(cityObject, current_weather):
-    icons = cache.get(cityObject.cache_key('icons'))
+def cache_forecast_icons(city_object, current_weather):
+    icons = cache.get(city_object.cache_key('icons'))
     if icons is None:
         day1_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][1]['day']['icon'])
         day2_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][2]['day']['icon'])
         day3_icon = 'http://l.yimg.com/a/i/us/we/52/{}.gif'.format(current_weather['forecasts'][3]['day']['icon'])
         icons = [day1_icon, day2_icon, day3_icon]
-        cache.set(cityObject.cache_key('icons'), icons, CACHE_TIME_FIVE)
+        cache.set(city_object.cache_key('icons'), icons, CACHE_TIME_FIVE)
 
     return icons
 
 
-def cache_current_weather_data(cityObject):
-    current_weather = cache.get(cityObject.cache_key('current_weather'))
+def cache_current_weather_data(city_object):
+    current_weather = cache.get(city_object.cache_key('current_weather'))
     if current_weather is None:
-        current_weather = pywapi.get_weather_from_weather_com(cityObject.location_id)
-        cache.set(cityObject.cache_key('current_weather'), current_weather, CACHE_TIME_FIVE)
+        current_weather = pywapi.get_weather_from_weather_com(city_object.location_id)
+        cache.set(city_object.cache_key('current_weather'), current_weather, CACHE_TIME_FIVE)
     return current_weather
 
 
