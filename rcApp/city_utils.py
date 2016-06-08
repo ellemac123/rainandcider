@@ -77,7 +77,7 @@ def get_news(city_state, country_name):
                 news_list.append(json_response["results"][0]["article_list"]["results"][x]["title"])
         else:
             raise ValueError
-#            news_list = ['No Current News to Report']
+        #            news_list = ['No Current News to Report']
         return news_list
     except ValueError:
         news_list = ['No News to Report']
