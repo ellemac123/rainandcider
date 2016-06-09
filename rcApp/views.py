@@ -94,12 +94,10 @@ def detail(request, country_code, city_code):
             'city': city_data, 'state': state,
             'current_conditions': current_text,
             'units': current_weather['units'],
-            'temperature_units': current_weather['units']['temperature'],
             'current_icon': current_icon,
             'current_weather': current_weather['current_conditions'],
             'day_forecast': current_weather['forecasts'],
             'twitter_text': text,
-            'speed_units': current_weather['units']['speed'],
             'timezone': local_timezone,
             'current_time': current_time,
             'news': news, 'icons': icons}

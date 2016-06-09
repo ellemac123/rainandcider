@@ -60,7 +60,7 @@
                 <h3 id="feelsLike">Feels Like: {{current_weather.feels_like}}°{{units.temperature}}</h3>
             </div>
             <div class="card">
-                <h4 id="precipDetail">Chance of Precipetation: {{current_weather.0.day.chance_precip}}%</h4>
+                <h4 id="precipDetail">Chance of Precipetation: {{day_forecast.0.day.chance_precip}}%</h4>
                 <h4 id="windDetail">Wind: {{current_weather.wind.text}} {{current_weather.wind.speed}} {{units.speed}}</h4>
                 <h4 id="humidityDetail">Humidity: {{current_weather.humidity}}%</h4>
                 <h4 id="highDetail">High: {{day_forecast.0.high}}°{{units.temperature}} </h4>
@@ -136,7 +136,7 @@
                     <tr>
                         <td>{{day_forecast.1.day.brief_text}}</td>
                         <td>{{day_forecast.2.day.brief_text}}</td>
-                        <td>{{day_forecast.3.day.bried_text}}</td>
+                        <td>{{day_forecast.3.day.brief_text}}</td>
                     </tr>
                     <tr>
                         <td>{{day_forecast.1.day.chance_precip}}% chance of precipitation</td>
