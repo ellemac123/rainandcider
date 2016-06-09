@@ -100,10 +100,12 @@ def detail(request, country_code, city_code):
             'wind_direction': current_weather['current_conditions']['wind']['text'],
             'wind': current_weather['current_conditions']['wind']['speed'],
             'humidity': current_weather['current_conditions']['humidity'],
+            'day_forecast': current_weather['forecasts'],
+
             'day0_high': current_weather['forecasts'][0]['high'],
             'day0_low': current_weather['forecasts'][0]['low'],
             'twitter_text': text,
-            'speed_units': current_weather['units']['speed'], 
+            'speed_units': current_weather['units']['speed'],
             'timezone': local_timezone,
             'current_time': current_time,
             'tommDate': current_weather['forecasts'][1]['date'],
