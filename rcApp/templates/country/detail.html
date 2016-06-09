@@ -135,18 +135,18 @@
                     </tr>
                     <tr>
                         <td>{{day_forecast.1.day.brief_text}}</td>
-                        <td>{{day2forecast}}</td>
-                        <td>{{day3forecast}}</td>
+                        <td>{{day_forecast.2.day.brief_text}}</td>
+                        <td>{{day_forecast.3.day.bried_text}}</td>
                     </tr>
                     <tr>
                         <td>{{day_forecast.1.day.chance_precip}}% chance of precipitation</td>
-                        <td>{{day2_precip}}% chance of precipitation</td>
-                        <td>{{day3_precip}}% chance of precipitation</td>
+                        <td>{{day_forecast.2.day.chance_precip}}% chance of precipitation</td>
+                        <td>{{day_forecast.3.day.chance_precip}}% chance of precipitation</td>
                     </tr>
                     <tr>
-                        <td>Wind: {{wind1_direction}} {{wind1}} {{speed_units}}</td>
-                        <td>Wind: {{wind2_direction}} {{wind2}} {{speed_units}}</td>
-                        <td>Wind: {{wind3_direction}} {{wind3}} {{speed_units}}</td>
+                        <td>Wind: {{day_forecast.1.day.wind.text}} {{day_forecast.1.day.wind.speed}} {{speed_units}}</td>
+                        <td>Wind: {{day_forecast.2.day.wind.text}} {{day_forecast.2.day.wind.speed}}} {{speed_units}}</td>
+                        <td>Wind: {{day_forecast.3.day.wind.text}} {{day_forecast.3.day.wind.speed}}} {{speed_units}}</td>
                     </tr>
                     <tr>
                         <td>High: {{day_forecast.1.high}}°{{temperature_units}}</td>

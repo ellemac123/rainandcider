@@ -108,19 +108,8 @@ def detail(request, country_code, city_code):
             'current_time': current_time,
             'tommDate': current_weather['forecasts'][1]['date'],
             'news': news, 'icons': icons,
-            'date2': current_weather['forecasts'][2]['date'], 'date3': current_weather['forecasts'][3]['date'],
-            'day1forecast': current_weather['forecasts'][1]['day']['brief_text'],
-            'day1_precip': current_weather['forecasts'][1]['day']['chance_precip'],
-            'day2forecast': current_weather['forecasts'][2]['day']['brief_text'],
-            'day2_precip': current_weather['forecasts'][2]['day']['chance_precip'],
-            'day3forecast': current_weather['forecasts'][3]['day']['brief_text'],
-            'day3_precip': current_weather['forecasts'][3]['day']['chance_precip'],
-            'wind1': current_weather['forecasts'][1]['day']['wind']['speed'],
-            'wind2': current_weather['forecasts'][2]['day']['wind']['speed'],
-            'wind3': current_weather['forecasts'][3]['day']['wind']['speed'],
-            'wind1_direction': current_weather['forecasts'][1]['day']['wind']['text'],
-            'wind2_direction': current_weather['forecasts'][2]['day']['wind']['text'],
-            'wind3_direction': current_weather['forecasts'][3]['day']['wind']['text']}
+            'date2': current_weather['forecasts'][2]['date'],
+            'date3': current_weather['forecasts'][3]['date']}
     return render(request, 'country/detail.html', data)
 
 
