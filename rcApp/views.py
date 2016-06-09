@@ -90,11 +90,12 @@ def detail(request, country_code, city_code):
     current_text = weather_error_check(current_weather)
 
     logger.info('data is stored to be passed to detail.html')
-    data = {'country': Country(country_code), 'city': city_data, 'state': state,
+    data = {'country': Country(country_code),
+            'city': city_data, 'state': state,
             'current_conditions': current_text,
+            'units': current_weather['units'],
             'temperature_units': current_weather['units']['temperature'],
             'current_icon': current_icon,
-            'chance_precip': current_weather['forecasts'][0]['day']['chance_precip'],
             'current_weather': current_weather['current_conditions'],
             'day_forecast': current_weather['forecasts'],
             'twitter_text': text,
