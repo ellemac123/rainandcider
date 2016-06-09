@@ -95,8 +95,6 @@ def detail(request, country_code, city_code):
             'temperature_units': current_weather['units']['temperature'],
             'current_icon': current_icon,
             'chance_precip': current_weather['forecasts'][0]['day']['chance_precip'],
-            'wind_direction': current_weather['current_conditions']['wind']['text'],
-            'wind': current_weather['current_conditions']['wind']['speed'],
             'current_weather': current_weather['current_conditions'],
             'day_forecast': current_weather['forecasts'],
             'twitter_text': text,

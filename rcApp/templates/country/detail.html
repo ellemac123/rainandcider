@@ -61,7 +61,7 @@
             </div>
             <div class="card">
                 <h4 id="precipDetail">Chance of Precipetation: {{chance_precip}}%</h4>
-                <h4 id="windDetail">Wind: {{wind_direction}} {{wind}} {{speed_units}}</h4>
+                <h4 id="windDetail">Wind: {{current_weather.wind.text}} {{current_weather.wind.speed}} {{speed_units}}</h4>
                 <h4 id="humidityDetail">Humidity: {{current_weather.humidity}}%</h4>
                 <h4 id="highDetail">High: {{day_forecast.0.high}}°{{temperature_units}} </h4>
                 <h4 id="lowDetail">Low: {{day_forecast.0.low}}°{{temperature_units}}</h4>
