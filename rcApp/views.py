@@ -92,24 +92,18 @@ def detail(request, country_code, city_code):
     logger.info('data is stored to be passed to detail.html')
     data = {'country': Country(country_code), 'city': city_data, 'state': state,
             'current_conditions': current_text,
-            'current_temperature': current_weather['current_conditions']['temperature'],
             'temperature_units': current_weather['units']['temperature'],
             'current_icon': current_icon,
-            'last_update': current_weather['current_conditions']['last_updated'],
-            'feels_like': current_weather['current_conditions']['feels_like'],
             'chance_precip': current_weather['forecasts'][0]['day']['chance_precip'],
             'wind_direction': current_weather['current_conditions']['wind']['text'],
             'wind': current_weather['current_conditions']['wind']['speed'],
-            'humidity': current_weather['current_conditions']['humidity'],
+            'current_weather': current_weather['current_conditions'],
             'day_forecast': current_weather['forecasts'],
             'twitter_text': text,
             'speed_units': current_weather['units']['speed'],
             'timezone': local_timezone,
             'current_time': current_time,
-            'tommDate': current_weather['forecasts'][1]['date'],
-            'news': news, 'icons': icons,
-            'date2': current_weather['forecasts'][2]['date'],
-            'date3': current_weather['forecasts'][3]['date']}
+            'news': news, 'icons': icons}
     return render(request, 'country/detail.html', data)
 
 

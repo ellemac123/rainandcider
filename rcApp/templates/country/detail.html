@@ -53,19 +53,19 @@
         <div id="weatherCard" class="card">
             <div class="card">
                 <h2 id="weatherHeader">Current forecast:</h2>
-                <h3 id="weatherDetail">{{current_conditions}} {{current_temperature}}°{{temperature_units}} in
+                <h3 id="weatherDetail">{{current_conditions}} {{current_weather.temperature}}°{{temperature_units}} in
                     {{city}}</h3>
                 <img src="{{current_icon}}"/>
 
-                <h3 id="feelsLike">Feels Like: {{feels_like}}°{{temperature_units}}</h3>
+                <h3 id="feelsLike">Feels Like: {{current_weather.feels_like}}°{{temperature_units}}</h3>
             </div>
             <div class="card">
                 <h4 id="precipDetail">Chance of Precipetation: {{chance_precip}}%</h4>
                 <h4 id="windDetail">Wind: {{wind_direction}} {{wind}} {{speed_units}}</h4>
-                <h4 id="humidityDetail">Humidity: {{humidity}}%</h4>
+                <h4 id="humidityDetail">Humidity: {{current_weather.humidity}}%</h4>
                 <h4 id="highDetail">High: {{day_forecast.0.high}}°{{temperature_units}} </h4>
                 <h4 id="lowDetail">Low: {{day_forecast.0.low}}°{{temperature_units}}</h4>
-                <h3 id="lastUpdated">Last Updated: {{last_update}} by weather.com</h3>
+                <h3 id="lastUpdated">Last Updated: {{current_weather.last_updated}} by weather.com</h3>
                 <h3 id="timezone">{{timezone}} timezone</h3>
             </div>
         </div>
@@ -124,9 +124,9 @@
                         <col style="background-color:white">
                     </colgroup>
                     <tr>
-                        <th>{{tommDate}}</th>
-                        <th>{{date2}}</th>
-                        <th>{{date3}}</th>
+                        <th>{{day_forecast.1.date}}</th>
+                        <th>{{day_forecast.2.date}}</th>
+                        <th>{{day_forecast.3.date}}</th>
                     </tr>
                     <tr>
                         <td><img src="{{icons.0}}"/></td>
@@ -145,8 +145,8 @@
                     </tr>
                     <tr>
                         <td>Wind: {{day_forecast.1.day.wind.text}} {{day_forecast.1.day.wind.speed}} {{speed_units}}</td>
-                        <td>Wind: {{day_forecast.2.day.wind.text}} {{day_forecast.2.day.wind.speed}}} {{speed_units}}</td>
-                        <td>Wind: {{day_forecast.3.day.wind.text}} {{day_forecast.3.day.wind.speed}}} {{speed_units}}</td>
+                        <td>Wind: {{day_forecast.2.day.wind.text}} {{day_forecast.2.day.wind.speed}} {{speed_units}}</td>
+                        <td>Wind: {{day_forecast.3.day.wind.text}} {{day_forecast.3.day.wind.speed}} {{speed_units}}</td>
                     </tr>
                     <tr>
                         <td>High: {{day_forecast.1.high}}°{{temperature_units}}</td>
