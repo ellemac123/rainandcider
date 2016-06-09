@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+import sys
 from datetime import timedelta
 
 import djcelery
@@ -19,6 +20,7 @@ from kombu import Exchange, Queue
 djcelery.setup_loader()
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(BASE_DIR, "lib"))
 
 if 'OPENSHIFT_REPO_DIR' in os.environ:
     ON_OPENSHIFT = True
@@ -44,6 +46,9 @@ INSTALLED_APPS = [
     'rcApp',
     'djcelery',
 ]
+
+if not ON_OPENSHIFT:
+    INSTALLED_APPS += ['django_extensions', 'debug_toolbar']
 
 MIDDLEWARE_CLASSES = [
     # 'django.middleware.security.SecurityMiddleware',
@@ -171,13 +176,17 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': os.path.join(os.environ['OPENSHIFT_DATA_DIR'], 'debug.log')
+            'filename': os.path.join(LOG_DIR, 'debug.log')
         },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler'
+        }
     },
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'DEBUG',
+            'level': LOG_LEVEL,
             'propagate': True,
         },
     },
