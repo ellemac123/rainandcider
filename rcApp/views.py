@@ -77,6 +77,7 @@ def detail(request, country_code, city_code):
         raise Http404("Invalid Country Code")
     city_data = City.objects.get(id=city_code)
 
+
     current_weather = cache_current_weather_data(city_data)
     current_icon = cache_current_icon(city_data, current_weather)
     icons = cache_forecast_icons(city_data, current_weather)
