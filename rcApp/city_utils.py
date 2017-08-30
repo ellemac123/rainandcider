@@ -10,6 +10,7 @@ from timezonefinder import TimezoneFinder
 from twython import Twython
 
 twitterHandle = ''
+
 TWITTER_KEY = 'kkgJHe2AJCJ7TEumZa7WZ2pdR'
 TWITTER_SECRET = 'z4fl2dFDDiLrV6w66Mpu2hu9lLSW0tEVkBAUTcyhgv2zaj4H6q'
 CACHE_TIME_DAY = 86400

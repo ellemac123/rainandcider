@@ -15,14 +15,14 @@
 
 
 <body>
-    <div id="header_logo">
-        <a id="logo" href="/">
-            <img src="/static/images/home_icon.png" height="24" width="24" href="/">
-        </a>
-    </div>
+<div id="header_logo">
+    <a id="logo" href="/">
+        <img src="/static/images/home_icon.png" height="24" width="24" href="/">
+    </a>
+</div>
 
 
-    <div id="page-wrap">
+<div id="page-wrap">
     <ul id="js-news" class="js-hidden">
         <li class="news-item"><a href="#">{{news.0}}</a></li>
         <li class="news-item"><a href="#">{{news.1}}</a></li>
@@ -40,6 +40,7 @@
     $(function () {
         $('#js-news').ticker();
     });
+
     </script>
 
 
@@ -61,7 +62,8 @@
             </div>
             <div class="card">
                 <h4 id="precipDetail">Chance of Precipetation: {{day_forecast.0.day.chance_precip}}%</h4>
-                <h4 id="windDetail">Wind: {{current_weather.wind.text}} {{current_weather.wind.speed}} {{units.speed}}</h4>
+                <h4 id="windDetail">Wind: {{current_weather.wind.text}} {{current_weather.wind.speed}}
+                    {{units.speed}}</h4>
                 <h4 id="humidityDetail">Humidity: {{current_weather.humidity}}%</h4>
                 <h4 id="highDetail">High: {{day_forecast.0.high}}°{{units.temperature}} </h4>
                 <h4 id="lowDetail">Low: {{day_forecast.0.low}}°{{units.temperature}}</h4>
@@ -71,8 +73,6 @@
         </div>
 
 
-
-
         <div id="twitterCard" class="card">
             <h2 id="twitterHeader" variable={{twitter_text.1}}>You are looking at local tweets in this area</h2>
             <script>
@@ -80,6 +80,7 @@
                     if(header.getAttribute('variable') == ""){
                         $('#twitterHeader').html('Currently, there are no local tweets to display');
                     }
+
             </script>
 
             <div class="card" id="feedcard" variable={{twitter_text.1}}>
@@ -89,6 +90,7 @@
                     if(plant.getAttribute('variable') == ""){
                          $('#feedcard').css("display", "none");
                     }
+
                 </script>
             </div>
             <div class="card" id="feedcard1" variable={{twitter_text.3}}>
@@ -98,6 +100,7 @@
                     if(plant.getAttribute('variable') == ""){
                          $('#feedcard1').css("display", "none");
                     }
+
                 </script>
             </div>
             <div class="card" id="feedcard2" variable={{twitter_text.5}}>
@@ -107,11 +110,10 @@
                     if(plant.getAttribute('variable') == ""){
                          $('#feedcard2').css("display", "none");
                     }
+
                 </script>
             </div>
         </div>
-
-
 
 
         <div id="forecastCard" class="card">
@@ -144,9 +146,12 @@
                         <td>{{day_forecast.3.day.chance_precip}}% chance of precipitation</td>
                     </tr>
                     <tr>
-                        <td>Wind: {{day_forecast.1.day.wind.text}} {{day_forecast.1.day.wind.speed}} {{units.speed}}</td>
-                        <td>Wind: {{day_forecast.2.day.wind.text}} {{day_forecast.2.day.wind.speed}} {{units.speed}}</td>
-                        <td>Wind: {{day_forecast.3.day.wind.text}} {{day_forecast.3.day.wind.speed}} {{units.speed}}</td>
+                        <td>Wind: {{day_forecast.1.day.wind.text}} {{day_forecast.1.day.wind.speed}} {{units.speed}}
+                        </td>
+                        <td>Wind: {{day_forecast.2.day.wind.text}} {{day_forecast.2.day.wind.speed}} {{units.speed}}
+                        </td>
+                        <td>Wind: {{day_forecast.3.day.wind.text}} {{day_forecast.3.day.wind.speed}} {{units.speed}}
+                        </td>
                     </tr>
                     <tr>
                         <td>High: {{day_forecast.1.high}}°{{units.temperature}}</td>
@@ -165,8 +170,7 @@
     </div>
 
 
-
-    </div>
+</div>
 
 </body>
 
